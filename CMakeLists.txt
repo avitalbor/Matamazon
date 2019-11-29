@@ -2,5 +2,19 @@ cmake_minimum_required(VERSION 3.15)
 project(ex1 C)
 
 set(CMAKE_C_STANDARD 99)
+set(GCC_COVERAGE_COMPILE_FLAGS "-L. -lmtm ")
 
-add_executable(ex1 main.c Matamazon/matamazom.c amount_Set/amount_set.c)
+
+include_directories(.)
+
+
+add_executable(ex1
+        amount_set.h
+        amount_set.c
+        matamazom.c
+        matamazom.h
+        set.h
+        main.c
+        )
+
+target_link_libraries(ex1 ${CMAKE_SOURCE_DIR}/libmtm.a)

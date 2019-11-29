@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/User/CLionProjects/ex1/Matamazon/amount_set.h
+stdio.h
+-
+stdbool.h
+-
+
+C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.c
+assert.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+stdbool.h
+-
+amount_set.h
+C:/Users/User/CLionProjects/ex1/Matamazon/amount_set.h
+matamazom.h
+C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.h
+set.h
+C:/Users/User/CLionProjects/ex1/Matamazon/set.h
+
+C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.h
+stdio.h
+-
+stdbool.h
+-
+
+C:/Users/User/CLionProjects/ex1/Matamazon/set.h
+stdbool.h
+-
+

@@ -2,13 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../amount_Set/amount_set.h"
-#include "../matamazom.h"
-#include "../set.h"
-#include "../list.h"
+#include <stdbool.h>
+#include "amount_set.h"
+#include "matamazom.h"
+#include "set.h"
 
-
-
+#define IN_RANGE_OF_MISTAKE 0.001
 
 
 
@@ -225,26 +224,136 @@ static SetElement copyForSet(SetElement element){
 
 
 Matamazom matamazomCreate(){
-    Matamazom matamazom=malloc(sizeof( Matamazom));
-    if(!matamazom){
+    Matamazom warehouse=malloc(sizeof( Matamazom));
+    if(!warehouse){
         return NULL;
     }
-    matamazom->list_of_products=asCreate(copyForAmountSet,freeForAmountSet,compareForAmountSet);
-    if(!matamazom->list_of_products){
-        free(matamazom);
+    warehouse->list_of_products=asCreate(copyForAmountSet,freeForAmountSet,compareForAmountSet);
+    if(!warehouse->list_of_products){
+        free(warehouse);
         return NULL;
     }
-    matamazom->set_of_orders=setCreate(copyForSet,freeForSet,compareForSet);
-    if(!matamazom->set_of_orders){
-        asDestroy(matamazom->list_of_products);
-        free(matamazom);
+    warehouse->set_of_orders=setCreate(copyForSet,freeForSet,compareForSet);
+    if(!warehouse->set_of_orders){
+        asDestroy(warehouse->list_of_products);
+        free(warehouse);
         return NULL;
     }
-    return matamazom;
+    return warehouse;
 }
 
 
 
+void matamazomDestroy(Matamazom matamazom){
+    asDestroy(matamazom->list_of_products);
+    setDestroy(matamazom->set_of_orders);
+    free(matamazom);
+}
+
+/**
+ * check if name is valid function
+ * @return:
+ * false- if name is empty, or doesn't start with a
+ *         letter (a -z, A -Z) or a digit (0 -9).
+ * true -otherwise
+ */
+
+static bool checkIfNameIsValid(const char* name){
+    assert(name);
+    if(strlen(name)==0){
+        return false;
+    }
+    if(name[0]>='a'&&name[0]<='z'){
+        return true;
+    }
+    if(name[0]>='A'&&name[0]<='Z'){
+        return true;
+    }
+    if((name[0]-'0')>=0 &&(name[0]-'0')<=9){
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * receives a number ant returns it absolute value
+ */
+static double absOfNum(double num){
+    if(num<0){
+        return -num;
+    }
+    return num;
+}
+
+
+/**
+ * check if the amount is valid and consistent with the amountType
+ * @return:
+ * false- if amount is negative or amount isn't consistent with the amountType
+ * true -otherwise
+ */
+
+static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amount){
+    if(amount<0){
+        return false;
+    }
+    if(amountType==MATAMAZOM_ANY_AMOUNT){
+        return true;
+    }
+    int completeValue=(int)amount;
+
+    if((amount-completeValue)<=IN_RANGE_OF_MISTAKE|| ((completeValue+1))-amount<=IN_RANGE_OF_MISTAKE){
+        return true;
+    }
+    double completeValueAndHalf=(double)completeValue+0.5;
+    if(amountType=MATAMAZOM_HALF_INTEGER_AMOUNT){
+        if(absOfNum((completeValueAndHalf-amount))<=IN_RANGE_OF_MISTAKE){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const char *name,
+                              const double amount, const MatamazomAmountType amountType,
+                              const MtmProductData customData, MtmCopyData copyData,
+                              MtmFreeData freeData, MtmGetProductPrice prodPrice){
+
+
+    if(!matamazom || !name ||!customData ||!copyData ||!freeData ||!prodPrice){
+        return MATAMAZOM_NULL_ARGUMENT;
+    }
+    if(!checkIfNameIsValid(name)){
+        return MATAMAZOM_INVALID_NAME;
+    }
+    if(!checkIfAmountIsValid(amountType,amount)){
+        return MATAMAZOM_INVALID_AMOUNT;
+    }
+    Product newProduct=malloc(sizeof(Product));
+    if(!newProduct){
+        return NULL;
+    }
+    newProduct->id=id;
+    newProduct->name=name;//not sure
+    newProduct->copy_function=copyData;
+    newProduct->free_function=freeData;
+    newProduct->get_price_function=prodPrice;
+    newProduct->income=0;
+    newProduct->additional_info=customData;
+    newProduct->amount_type=amountType;
+    AmountSetResult registerNewProduct=asRegister(matamazom->list_of_products,newProduct);
+    assert(registerNewProduct);
+    if (registerNewProduct==AS_ITEM_ALREADY_EXISTS){
+        freeProducts(newProduct);
+        return MATAMAZOM_PRODUCT_ALREADY_EXIST;
+    }
+    assert(registerNewProduct==AS_SUCCESS);
+    asChangeAmount(matamazom->list_of_products,newProduct,amount);
+    return MATAMAZOM_SUCCESS;
+}
 
 
 
