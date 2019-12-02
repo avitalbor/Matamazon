@@ -145,7 +145,15 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
     if(!asContains(set,element)){
         return AS_ITEM_DOES_NOT_EXIST;
     }
-    Set_Container tmp = set->iterator;
+    Set_Container tmp = set->amountSetContainer->nextContainer;
+    while (tmp){
+        if(set->compareAsElements(tmp->element,element)==0){
+            *outAmount=tmp->quantity;
+            return AS_SUCCESS;
+        }
+        tmp=tmp->nextContainer;
+    }
+    /*Set_Container tmp = set->iterator;
     AS_FOREACH(ASElement ,currentElement,set){
         if(set->compareAsElements(currentElement,element)==0){
             *outAmount = set->iterator->quantity;
@@ -153,7 +161,7 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
         break;
     }
     set->iterator = tmp;
-    return AS_SUCCESS;
+    return AS_SUCCESS;*/
 }
 
 AmountSetResult asRegister(AmountSet set, ASElement element){
@@ -177,7 +185,6 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
     }
     Set_Container tmp= set->amountSetContainer;
     while(tmp->nextContainer){
-        //printf("3\n");
         if(set->compareAsElements((tmp->nextContainer)->element,element)>0){
             newContainer->nextContainer=tmp->nextContainer;
             tmp->nextContainer=newContainer;
@@ -185,7 +192,6 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
         }
         tmp=tmp->nextContainer;
     }
-    //end of the set
     tmp->nextContainer=newContainer;
     newContainer->nextContainer=NULL;
     return  AS_SUCCESS;
@@ -198,18 +204,20 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
     if(!asContains(set,element)){
         return AS_ITEM_DOES_NOT_EXIST;
     }
-    Set_Container tmp = set->iterator;
-    AS_FOREACH(ASElement ,currentElement,set){
-        if(set->compareAsElements(currentElement,element)==0){
-            if(((set->iterator->quantity) + amount) < 0){
-                set->iterator = tmp;
+    Set_Container tmp = set->amountSetContainer->nextContainer;
+    while (tmp){
+        if(set->compareAsElements(tmp->element,element)==0)
+        {
+            if((tmp->quantity)+amount<0){
                 return AS_INSUFFICIENT_AMOUNT;
+            } else{
+                tmp->quantity=tmp->quantity+amount;
+                return AS_SUCCESS;
             }
-            set->iterator->quantity = (set->iterator->quantity) + amount;
         }
-        break;
+        tmp=tmp->nextContainer;
     }
-    return AS_SUCCESS;
+    //should not get here
 }
 
 AmountSetResult asDelete(AmountSet set, ASElement element){

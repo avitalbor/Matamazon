@@ -47,7 +47,9 @@ bool testModify() {
 
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 2, 10.5) == AS_SUCCESS);
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 1, 3) == AS_SUCCESS);
+    printf("helllllo");
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 1, -17) == AS_INSUFFICIENT_AMOUNT);
+    printf("fixed this\n");
     ASSERT_OR_DESTROY(asDelete(set, ids + 3) == AS_SUCCESS);
 
     asDestroy(set);
