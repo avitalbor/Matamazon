@@ -1,3 +1,0 @@
-C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/cmake-build-debug/CMakeFiles/ex1.dir
-C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/cmake-build-debug/CMakeFiles/rebuild_cache.dir

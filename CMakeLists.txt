@@ -4,17 +4,6 @@ project(ex1 C)
 set(CMAKE_C_STANDARD 99)
 set(GCC_COVERAGE_COMPILE_FLAGS "-L. -lmtm ")
 
-
-include_directories(.)
-
-
-add_executable(ex1
-        amount_set.h
-        amount_set.c
-        amount_set_main.c
-        amount_set_tests.h
-        amount_set_tests.c
-        test_utilities.h
-        )
+add_executable(ex1 amount_set_main.c amount_set.h amount_set.c amount_set_tests.h amount_set_tests.c test_utilities.h)
 
 target_link_libraries(ex1 ${CMAKE_SOURCE_DIR}/libmtm.a)
