@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/User/CLionProjects/ex1/Matamazon
+# Install script for directory: C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/User/CLionProjects/ex1/Matamazon/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

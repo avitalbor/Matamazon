@@ -2,15 +2,15 @@
 #include "amount_set.h"
 #include <stdlib.h>
 #include <assert.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 typedef struct set_Container{
-    ASElement element;;
+    ASElement element;
     double quantity;
     struct set_Container* nextContainer;
 } *Set_Container;
 
-typedef struct AmountSet_t{
+struct AmountSet_t{
     CopyASElement copyElement;
     FreeASElement freeAsElement;
     CompareASElements compareAsElements;
@@ -29,24 +29,24 @@ AmountSet asCreate(CopyASElement copyElement,
     if(set==NULL){
         return NULL;
     }
-    Set_Container dameContainer= malloc(sizeof(Set_Container));
-    if(!dameContainer){
+    Set_Container dummyContainer= malloc(sizeof(Set_Container));
+    if(!dummyContainer){
         free(set);
         return NULL;
     }
-    dameContainer->quantity=0;
-    dameContainer->nextContainer=NULL;
+    dummyContainer->quantity=0;
+    dummyContainer->nextContainer=NULL;
     set ->copyElement= copyElement;
     set ->compareAsElements= compareElements;
     set ->freeAsElement= freeElement;
-    set ->amountSetContainer= dameContainer;
+    set ->amountSetContainer= dummyContainer;
     set ->iterator=NULL;
     set->size_of_Set=0;
 
     return set;
 }
 
-//frees all the elements and containers of the set except the dame container;
+// frees all the elements and containers of the set except for the dummy container
 static void freeElements(AmountSet set){
     assert(set);
     assert(set->amountSetContainer!=NULL);
@@ -66,10 +66,56 @@ void asDestroy(AmountSet set) {
     }
 }
 
-AmountSet asCopy(AmountSet set){
-
+static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Container Last_Container){
+    Set_Container Container_copy = malloc(sizeof(Set_Container));
+    if(!Container_copy){
+        return NULL;
+    }
+    Container_copy->element = set->copyElement(Container->element);
+    Container_copy->quantity = Container->quantity;
+    Container_copy->nextContainer = NULL;
+    Last_Container->nextContainer = Container_copy;
+    return Container_copy;
 }
+
+AmountSet asCopy(AmountSet set){
+    AmountSet set_copy = malloc(sizeof(AmountSet));
+    if(set_copy == NULL){
+        return NULL;
+    }
+    Set_Container dummyContainer_copy = malloc(sizeof(Set_Container));
+    if(!dummyContainer_copy){
+        free(set_copy);
+        return NULL;
+    }
+    dummyContainer_copy->quantity=0;
+    dummyContainer_copy->nextContainer=NULL;
+    set_copy->copyElement = set->copyElement;
+    set_copy->compareAsElements = set->compareAsElements;
+    set_copy->freeAsElement = set->freeAsElement;
+    set_copy->amountSetContainer = dummyContainer_copy;
+    set_copy->iterator = NULL;
+    set_copy->size_of_Set = 0;
+    Set_Container tmp = dummyContainer_copy;
+    AS_FOREACH(ASElement ,currentElement,set){
+        if(scCopy(set_copy, currentElement, tmp) == NULL){
+            freeElements(set_copy);
+            free(dummyContainer_copy);
+            free(set_copy);
+            return NULL;
+        }
+        tmp = tmp->nextContainer;
+    }
+    set_copy->iterator = NULL;
+    set->iterator = NULL;
+    return set_copy;
+}
+
 int asGetSize(AmountSet set){
+    if(set == NULL){
+        return -1;
+    }
+    return set->size_of_Set;
 }
 
 bool asContains(AmountSet set, ASElement element)
@@ -85,13 +131,26 @@ bool asContains(AmountSet set, ASElement element)
     return false;
 }
 
-
 AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount){
-
+    if(!set || !element || !*outAmount) {
+        return AS_NULL_ARGUMENT;
+    }
+    if(!asContains(set,element)){
+        return AS_ITEM_DOES_NOT_EXIST;
+    }
+    Set_Container tmp = set->iterator;
+    AS_FOREACH(ASElement ,currentElement,set){
+        if(set->compareAsElements(currentElement,element)==0){
+            *outAmount = set->iterator->quantity;
+        }
+        break;
+    }
+    set->iterator = tmp;
+    return AS_SUCCESS;
 }
 
 AmountSetResult asRegister(AmountSet set, ASElement element){
-    set->iterator==NULL;//because iterator undefinde after calling this function
+    set->iterator = NULL;//because iterator undefinde after calling this function
     if(!set || !element){
         return AS_NULL_ARGUMENT;
     }
@@ -124,12 +183,30 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
 }
 
 AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double amount){
-
-}
-AmountSetResult asDelete(AmountSet set, ASElement element){
-    set->iterator==NULL;
+    if(!set || !element) {
+        return AS_NULL_ARGUMENT;
+    }
     if(!asContains(set,element)){
-        AS_ITEM_DOES_NOT_EXIST;
+        return AS_ITEM_DOES_NOT_EXIST;
+    }
+    Set_Container tmp = set->iterator;
+    AS_FOREACH(ASElement ,currentElement,set){
+        if(set->compareAsElements(currentElement,element)==0){
+            if(((set->iterator->quantity) + amount) < 0){
+                set->iterator = tmp;
+                return AS_INSUFFICIENT_AMOUNT;
+            }
+            set->iterator->quantity = (set->iterator->quantity) + amount;
+        }
+        break;
+    }
+    return AS_SUCCESS;
+}
+
+AmountSetResult asDelete(AmountSet set, ASElement element){
+    set->iterator = NULL;
+    if(!asContains(set,element)){
+        return AS_ITEM_DOES_NOT_EXIST;
     }
 
     Set_Container tmp1= set->amountSetContainer;
@@ -172,5 +249,4 @@ ASElement asGetNext(AmountSet set){
     assert(set->iterator->element);
     return set->iterator->element;
 }
-
 

@@ -11,12 +11,10 @@ include_directories(.)
 add_executable(ex1
         amount_set.h
         amount_set.c
-        matamazom.c
-        matamazom.h
-        matamazom_print.h
-        matamazom_print.c
-        set.h
-        main.c
+        amount_set_main.c
+        amount_set_tests.h
+        amount_set_tests.c
+        test_utilities.h
         )
 
 target_link_libraries(ex1 ${CMAKE_SOURCE_DIR}/libmtm.a)

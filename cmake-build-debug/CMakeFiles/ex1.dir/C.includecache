@@ -6,11 +6,37 @@
 
 #IncludeRegexTransform: 
 
+<<<<<<< HEAD
 C:/Users/User/CLionProjects/ex1/Matamazon/matamazom_print.c
 matamazom_print.h
 C:/Users/User/CLionProjects/ex1/Matamazon/matamazom_print.h
 
 C:/Users/User/CLionProjects/ex1/Matamazon/matamazom_print.h
+=======
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set.h
+stdio.h
+-
+stdbool.h
+-
+
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set_tests.c
+amount_set.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set.h
+amount_set_tests.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set_tests.h
+test_utilities.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/test_utilities.h
+stdlib.h
+-
+
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set_tests.h
+stdbool.h
+-
+
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/test_utilities.h
+stdbool.h
+-
+>>>>>>> master
 stdio.h
 -
 

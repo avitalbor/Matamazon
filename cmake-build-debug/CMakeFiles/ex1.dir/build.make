@@ -42,10 +42,10 @@ RM = "C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\User\CLionProjects\ex1\Matamazon
+CMAKE_SOURCE_DIR = C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug
+CMAKE_BINARY_DIR = C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/ex1.dir/depend.make
@@ -59,31 +59,32 @@ include CMakeFiles/ex1.dir/flags.make
 CMakeFiles/ex1.dir/amount_set.c.obj: CMakeFiles/ex1.dir/flags.make
 CMakeFiles/ex1.dir/amount_set.c.obj: CMakeFiles/ex1.dir/includes_C.rsp
 CMakeFiles/ex1.dir/amount_set.c.obj: ../amount_set.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/ex1.dir/amount_set.c.obj"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ex1.dir\amount_set.c.obj   -c C:\Users\User\CLionProjects\ex1\Matamazon\amount_set.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/ex1.dir/amount_set.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ex1.dir\amount_set.c.obj   -c C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set.c
 
 CMakeFiles/ex1.dir/amount_set.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ex1.dir/amount_set.c.i"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\User\CLionProjects\ex1\Matamazon\amount_set.c > CMakeFiles\ex1.dir\amount_set.c.i
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set.c > CMakeFiles\ex1.dir\amount_set.c.i
 
 CMakeFiles/ex1.dir/amount_set.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ex1.dir/amount_set.c.s"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\User\CLionProjects\ex1\Matamazon\amount_set.c -o CMakeFiles\ex1.dir\amount_set.c.s
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set.c -o CMakeFiles\ex1.dir\amount_set.c.s
 
-CMakeFiles/ex1.dir/matamazom.c.obj: CMakeFiles/ex1.dir/flags.make
-CMakeFiles/ex1.dir/matamazom.c.obj: CMakeFiles/ex1.dir/includes_C.rsp
-CMakeFiles/ex1.dir/matamazom.c.obj: ../matamazom.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/ex1.dir/matamazom.c.obj"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ex1.dir\matamazom.c.obj   -c C:\Users\User\CLionProjects\ex1\Matamazon\matamazom.c
+CMakeFiles/ex1.dir/amount_set_main.c.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/amount_set_main.c.obj: CMakeFiles/ex1.dir/includes_C.rsp
+CMakeFiles/ex1.dir/amount_set_main.c.obj: ../amount_set_main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/ex1.dir/amount_set_main.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ex1.dir\amount_set_main.c.obj   -c C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set_main.c
 
-CMakeFiles/ex1.dir/matamazom.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ex1.dir/matamazom.c.i"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\User\CLionProjects\ex1\Matamazon\matamazom.c > CMakeFiles\ex1.dir\matamazom.c.i
+CMakeFiles/ex1.dir/amount_set_main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ex1.dir/amount_set_main.c.i"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set_main.c > CMakeFiles\ex1.dir\amount_set_main.c.i
 
-CMakeFiles/ex1.dir/matamazom.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ex1.dir/matamazom.c.s"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\User\CLionProjects\ex1\Matamazon\matamazom.c -o CMakeFiles\ex1.dir\matamazom.c.s
+CMakeFiles/ex1.dir/amount_set_main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ex1.dir/amount_set_main.c.s"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set_main.c -o CMakeFiles\ex1.dir\amount_set_main.c.s
 
+<<<<<<< HEAD
 CMakeFiles/ex1.dir/matamazom_print.c.obj: CMakeFiles/ex1.dir/flags.make
 CMakeFiles/ex1.dir/matamazom_print.c.obj: CMakeFiles/ex1.dir/includes_C.rsp
 CMakeFiles/ex1.dir/matamazom_print.c.obj: ../matamazom_print.c
@@ -103,35 +104,56 @@ CMakeFiles/ex1.dir/main.c.obj: CMakeFiles/ex1.dir/includes_C.rsp
 CMakeFiles/ex1.dir/main.c.obj: ../main.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/ex1.dir/main.c.obj"
 	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ex1.dir\main.c.obj   -c C:\Users\User\CLionProjects\ex1\Matamazon\main.c
+=======
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: CMakeFiles/ex1.dir/flags.make
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: CMakeFiles/ex1.dir/includes_C.rsp
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: ../amount_set_tests.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/ex1.dir/amount_set_tests.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\ex1.dir\amount_set_tests.c.obj   -c C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set_tests.c
+>>>>>>> master
 
-CMakeFiles/ex1.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ex1.dir/main.c.i"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\User\CLionProjects\ex1\Matamazon\main.c > CMakeFiles\ex1.dir\main.c.i
+CMakeFiles/ex1.dir/amount_set_tests.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/ex1.dir/amount_set_tests.c.i"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set_tests.c > CMakeFiles\ex1.dir\amount_set_tests.c.i
 
-CMakeFiles/ex1.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ex1.dir/main.c.s"
-	C:\TDM-GCC-64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\User\CLionProjects\ex1\Matamazon\main.c -o CMakeFiles\ex1.dir\main.c.s
+CMakeFiles/ex1.dir/amount_set_tests.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/ex1.dir/amount_set_tests.c.s"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\amount_set_tests.c -o CMakeFiles\ex1.dir\amount_set_tests.c.s
 
 # Object files for target ex1
 ex1_OBJECTS = \
 "CMakeFiles/ex1.dir/amount_set.c.obj" \
+<<<<<<< HEAD
 "CMakeFiles/ex1.dir/matamazom.c.obj" \
 "CMakeFiles/ex1.dir/matamazom_print.c.obj" \
 "CMakeFiles/ex1.dir/main.c.obj"
+=======
+"CMakeFiles/ex1.dir/amount_set_main.c.obj" \
+"CMakeFiles/ex1.dir/amount_set_tests.c.obj"
+>>>>>>> master
 
 # External object files for target ex1
 ex1_EXTERNAL_OBJECTS =
 
 ex1.exe: CMakeFiles/ex1.dir/amount_set.c.obj
+<<<<<<< HEAD
 ex1.exe: CMakeFiles/ex1.dir/matamazom.c.obj
 ex1.exe: CMakeFiles/ex1.dir/matamazom_print.c.obj
 ex1.exe: CMakeFiles/ex1.dir/main.c.obj
+=======
+ex1.exe: CMakeFiles/ex1.dir/amount_set_main.c.obj
+ex1.exe: CMakeFiles/ex1.dir/amount_set_tests.c.obj
+>>>>>>> master
 ex1.exe: CMakeFiles/ex1.dir/build.make
 ex1.exe: ../libmtm.a
 ex1.exe: CMakeFiles/ex1.dir/linklibs.rsp
 ex1.exe: CMakeFiles/ex1.dir/objects1.rsp
 ex1.exe: CMakeFiles/ex1.dir/link.txt
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable ex1.exe"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable ex1.exe"
+>>>>>>> master
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\ex1.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -144,6 +166,6 @@ CMakeFiles/ex1.dir/clean:
 .PHONY : CMakeFiles/ex1.dir/clean
 
 CMakeFiles/ex1.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\User\CLionProjects\ex1\Matamazon C:\Users\User\CLionProjects\ex1\Matamazon C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles\ex1.dir\DependInfo.cmake --color=$(COLOR)
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles\ex1.dir\DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ex1.dir/depend
 

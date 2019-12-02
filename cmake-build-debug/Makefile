@@ -47,10 +47,10 @@ RM = "C:\Program Files\JetBrains\CLion 2019.2.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\User\CLionProjects\ex1\Matamazon
+CMAKE_SOURCE_DIR = C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug
+CMAKE_BINARY_DIR = C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +79,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\User\CLionProjects\ex1\Matamazon\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\CS_Technion\234124-MTM\Homeworks\HW1\Matamazon\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -149,59 +149,59 @@ amount_set.c.s:
 	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set.c.s
 .PHONY : amount_set.c.s
 
-main.obj: main.c.obj
+amount_set_main.obj: amount_set_main.c.obj
 
-.PHONY : main.obj
-
-# target to build an object file
-main.c.obj:
-	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/main.c.obj
-.PHONY : main.c.obj
-
-main.i: main.c.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/main.c.i
-.PHONY : main.c.i
-
-main.s: main.c.s
-
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/main.c.s
-.PHONY : main.c.s
-
-matamazom.obj: matamazom.c.obj
-
-.PHONY : matamazom.obj
+.PHONY : amount_set_main.obj
 
 # target to build an object file
-matamazom.c.obj:
-	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom.c.obj
-.PHONY : matamazom.c.obj
+amount_set_main.c.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set_main.c.obj
+.PHONY : amount_set_main.c.obj
 
-matamazom.i: matamazom.c.i
+amount_set_main.i: amount_set_main.c.i
 
-.PHONY : matamazom.i
+.PHONY : amount_set_main.i
 
 # target to preprocess a source file
-matamazom.c.i:
-	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom.c.i
-.PHONY : matamazom.c.i
+amount_set_main.c.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set_main.c.i
+.PHONY : amount_set_main.c.i
 
-matamazom.s: matamazom.c.s
+amount_set_main.s: amount_set_main.c.s
 
-.PHONY : matamazom.s
+.PHONY : amount_set_main.s
 
 # target to generate assembly for a file
-matamazom.c.s:
-	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom.c.s
-.PHONY : matamazom.c.s
+amount_set_main.c.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set_main.c.s
+.PHONY : amount_set_main.c.s
+
+amount_set_tests.obj: amount_set_tests.c.obj
+
+.PHONY : amount_set_tests.obj
+
+# target to build an object file
+amount_set_tests.c.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set_tests.c.obj
+.PHONY : amount_set_tests.c.obj
+
+amount_set_tests.i: amount_set_tests.c.i
+
+.PHONY : amount_set_tests.i
+
+# target to preprocess a source file
+amount_set_tests.c.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set_tests.c.i
+.PHONY : amount_set_tests.c.i
+
+amount_set_tests.s: amount_set_tests.c.s
+
+.PHONY : amount_set_tests.s
+
+# target to generate assembly for a file
+amount_set_tests.c.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/amount_set_tests.c.s
+.PHONY : amount_set_tests.c.s
 
 matamazom_print.obj: matamazom_print.c.obj
 
@@ -242,6 +242,7 @@ help:
 	@echo ... amount_set.obj
 	@echo ... amount_set.i
 	@echo ... amount_set.s
+<<<<<<< HEAD
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
@@ -251,6 +252,14 @@ help:
 	@echo ... matamazom_print.obj
 	@echo ... matamazom_print.i
 	@echo ... matamazom_print.s
+=======
+	@echo ... amount_set_main.obj
+	@echo ... amount_set_main.i
+	@echo ... amount_set_main.s
+	@echo ... amount_set_tests.obj
+	@echo ... amount_set_tests.i
+	@echo ... amount_set_tests.s
+>>>>>>> master
 .PHONY : help
 
 
