@@ -203,6 +203,33 @@ matamazom.c.s:
 	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom.c.s
 .PHONY : matamazom.c.s
 
+matamazom_print.obj: matamazom_print.c.obj
+
+.PHONY : matamazom_print.obj
+
+# target to build an object file
+matamazom_print.c.obj:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom_print.c.obj
+.PHONY : matamazom_print.c.obj
+
+matamazom_print.i: matamazom_print.c.i
+
+.PHONY : matamazom_print.i
+
+# target to preprocess a source file
+matamazom_print.c.i:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom_print.c.i
+.PHONY : matamazom_print.c.i
+
+matamazom_print.s: matamazom_print.c.s
+
+.PHONY : matamazom_print.s
+
+# target to generate assembly for a file
+matamazom_print.c.s:
+	$(MAKE) -f CMakeFiles\ex1.dir\build.make CMakeFiles/ex1.dir/matamazom_print.c.s
+.PHONY : matamazom_print.c.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -221,6 +248,9 @@ help:
 	@echo ... matamazom.obj
 	@echo ... matamazom.i
 	@echo ... matamazom.s
+	@echo ... matamazom_print.obj
+	@echo ... matamazom_print.i
+	@echo ... matamazom_print.s
 .PHONY : help
 
 

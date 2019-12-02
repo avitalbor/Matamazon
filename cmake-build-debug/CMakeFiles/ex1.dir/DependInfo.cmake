@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "C:/Users/User/CLionProjects/ex1/Matamazon/amount_set.c" "C:/Users/User/CLionProjects/ex1/Matamazon/cmake-build-debug/CMakeFiles/ex1.dir/amount_set.c.obj"
   "C:/Users/User/CLionProjects/ex1/Matamazon/main.c" "C:/Users/User/CLionProjects/ex1/Matamazon/cmake-build-debug/CMakeFiles/ex1.dir/main.c.obj"
   "C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.c" "C:/Users/User/CLionProjects/ex1/Matamazon/cmake-build-debug/CMakeFiles/ex1.dir/matamazom.c.obj"
+  "C:/Users/User/CLionProjects/ex1/Matamazon/matamazom_print.c" "C:/Users/User/CLionProjects/ex1/Matamazon/cmake-build-debug/CMakeFiles/ex1.dir/matamazom_print.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -9,5 +9,9 @@ CMakeFiles/ex1.dir/main.c.obj: ../main.c
 CMakeFiles/ex1.dir/matamazom.c.obj: ../amount_set.h
 CMakeFiles/ex1.dir/matamazom.c.obj: ../matamazom.c
 CMakeFiles/ex1.dir/matamazom.c.obj: ../matamazom.h
+CMakeFiles/ex1.dir/matamazom.c.obj: ../matamazom_print.h
 CMakeFiles/ex1.dir/matamazom.c.obj: ../set.h
+
+CMakeFiles/ex1.dir/matamazom_print.c.obj: ../matamazom_print.c
+CMakeFiles/ex1.dir/matamazom_print.c.obj: ../matamazom_print.h
 

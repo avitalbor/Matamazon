@@ -93,6 +93,12 @@
 		<Unit filename="C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.h">
 			<Option target="ex1"/>
 		</Unit>
+		<Unit filename="C:/Users/User/CLionProjects/ex1/Matamazon/matamazom_print.c">
+			<Option target="ex1"/>
+		</Unit>
+		<Unit filename="C:/Users/User/CLionProjects/ex1/Matamazon/matamazom_print.h">
+			<Option target="ex1"/>
+		</Unit>
 		<Unit filename="C:/Users/User/CLionProjects/ex1/Matamazon/set.h">
 			<Option target="ex1"/>
 		</Unit>

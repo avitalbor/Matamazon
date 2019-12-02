@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/ex1.dir/amount_set.c.obj"
   "CMakeFiles/ex1.dir/main.c.obj"
   "CMakeFiles/ex1.dir/matamazom.c.obj"
+  "CMakeFiles/ex1.dir/matamazom_print.c.obj"
   "ex1.exe"
   "ex1.exe.manifest"
   "ex1.pdb"

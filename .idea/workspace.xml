@@ -60,7 +60,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1574933344456</updated>
-      <workItem from="1574933345776" duration="9266000" />
+      <workItem from="1574933345776" duration="17914000" />
+      <workItem from="1575067104720" duration="7604000" />
+      <workItem from="1575317766170" duration="1006000" />
     </task>
     <servers />
   </component>
@@ -72,7 +74,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -83,7 +87,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/matamazom.c</url>
-          <line>9</line>
+          <line>10</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

@@ -13,6 +13,8 @@ add_executable(ex1
         amount_set.c
         matamazom.c
         matamazom.h
+        matamazom_print.h
+        matamazom_print.c
         set.h
         main.c
         )
