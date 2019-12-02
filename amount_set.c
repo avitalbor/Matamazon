@@ -90,7 +90,7 @@ AmountSet asCopy(AmountSet set){
     if(set_copy == NULL){
         return NULL;
     }
-    Set_Container dummyContainer_copy = malloc(sizeof(Set_Container));
+    Set_Container dummyContainer_copy = malloc(sizeof(*dummyContainer_copy));
     if(!dummyContainer_copy){
         free(set_copy);
         return NULL;
@@ -164,7 +164,7 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
     if(asContains(set,element)){
         return  AS_ITEM_ALREADY_EXISTS;
     }
-    Set_Container newContainer= malloc(sizeof(Set_Container));
+    Set_Container newContainer= malloc(sizeof(*newContainer));
     if(!newContainer){
         return AS_OUT_OF_MEMORY;
     }
@@ -177,9 +177,11 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
     }
     Set_Container tmp= set->amountSetContainer;
     while(tmp->nextContainer){
+        //printf("3\n");
         if(set->compareAsElements((tmp->nextContainer)->element,element)>0){
             newContainer->nextContainer=tmp->nextContainer;
             tmp->nextContainer=newContainer;
+            return  AS_SUCCESS;
         }
         tmp=tmp->nextContainer;
     }

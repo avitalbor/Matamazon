@@ -40,7 +40,9 @@ bool testModify() {
     AmountSet set = asCreate(copyInt, freeInt, compareInts);
     int ids[7] = {0, 4, 2, 5, 7, 3, 1};
     for (int i = 0; i < 7; ++i) {
+        printf("1 \n");
         ASSERT_OR_DESTROY(asRegister(set, ids + i) == AS_SUCCESS);
+        printf("we succeed\n");
     }
 
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 2, 10.5) == AS_SUCCESS);
