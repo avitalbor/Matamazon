@@ -6,37 +6,29 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/User/CLionProjects/ex1/Matamazon/amount_set.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set.h
 stdio.h
 -
 stdbool.h
 -
 
-C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.c
-assert.h
--
-stdio.h
--
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set_tests.c
+amount_set.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set.h
+amount_set_tests.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set_tests.h
+test_utilities.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/test_utilities.h
 stdlib.h
 -
-string.h
--
+
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/amount_set_tests.h
 stdbool.h
 -
-amount_set.h
-C:/Users/User/CLionProjects/ex1/Matamazon/amount_set.h
-matamazom.h
-C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.h
-set.h
-C:/Users/User/CLionProjects/ex1/Matamazon/set.h
 
-C:/Users/User/CLionProjects/ex1/Matamazon/matamazom.h
+C:/CS_Technion/234124-MTM/Homeworks/HW1/Matamazon/test_utilities.h
+stdbool.h
+-
 stdio.h
--
-stdbool.h
--
-
-C:/Users/User/CLionProjects/ex1/Matamazon/set.h
-stdbool.h
 -
 

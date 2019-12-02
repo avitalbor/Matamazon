@@ -4,10 +4,12 @@
 CMakeFiles/ex1.dir/amount_set.c.obj: ../amount_set.c
 CMakeFiles/ex1.dir/amount_set.c.obj: ../amount_set.h
 
-CMakeFiles/ex1.dir/main.c.obj: ../main.c
+CMakeFiles/ex1.dir/amount_set_main.c.obj: ../amount_set_main.c
+CMakeFiles/ex1.dir/amount_set_main.c.obj: ../amount_set_tests.h
+CMakeFiles/ex1.dir/amount_set_main.c.obj: ../test_utilities.h
 
-CMakeFiles/ex1.dir/matamazom.c.obj: ../amount_set.h
-CMakeFiles/ex1.dir/matamazom.c.obj: ../matamazom.c
-CMakeFiles/ex1.dir/matamazom.c.obj: ../matamazom.h
-CMakeFiles/ex1.dir/matamazom.c.obj: ../set.h
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: ../amount_set.h
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: ../amount_set_tests.c
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: ../amount_set_tests.h
+CMakeFiles/ex1.dir/amount_set_tests.c.obj: ../test_utilities.h
 
