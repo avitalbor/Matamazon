@@ -2,6 +2,8 @@
 #include "amount_set.h"
 #include <stdlib.h>
 #include <assert.h>
+
+
 //#include <stdio.h>
 
 typedef struct set_Container{
@@ -25,22 +27,25 @@ AmountSet asCreate(CopyASElement copyElement,
     if(!copyElement || !freeElement || !compareElements){
         return NULL;
     }
-    AmountSet set=malloc(sizeof(AmountSet));
+    AmountSet set=malloc(sizeof(*set));
     if(set==NULL){
         return NULL;
     }
-    Set_Container dummyContainer= malloc(sizeof(Set_Container));
+    assert(set);
+    Set_Container dummyContainer= malloc(sizeof(*dummyContainer));
     if(!dummyContainer){
         free(set);
         return NULL;
     }
+    assert(dummyContainer);
     dummyContainer->quantity=0;
     dummyContainer->nextContainer=NULL;
-    set ->copyElement= copyElement;
-    set ->compareAsElements= compareElements;
-    set ->freeAsElement= freeElement;
-    set ->amountSetContainer= dummyContainer;
-    set ->iterator=NULL;
+    dummyContainer->element=NULL;
+    set->copyElement= copyElement;
+    set->compareAsElements= compareElements;
+    set->freeAsElement= freeElement;
+    set->amountSetContainer= dummyContainer;
+    set->iterator=NULL;
     set->size_of_Set=0;
 
     return set;
@@ -61,13 +66,15 @@ static void freeElements(AmountSet set){
 void asDestroy(AmountSet set) {
     if(set!=NULL){
         freeElements(set);
-        free(set->amountSetContainer);
+        assert(set->amountSetContainer);
+        Set_Container tmp=set->amountSetContainer;
+        free(tmp);
         free(set);
     }
 }
 
 static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Container Last_Container){
-    Set_Container Container_copy = malloc(sizeof(Set_Container));
+    Set_Container Container_copy = malloc(sizeof(*Container_copy));
     if(!Container_copy){
         return NULL;
     }
@@ -79,7 +86,7 @@ static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Containe
 }
 
 AmountSet asCopy(AmountSet set){
-    AmountSet set_copy = malloc(sizeof(AmountSet));
+    AmountSet set_copy = malloc(sizeof(*set_copy));
     if(set_copy == NULL){
         return NULL;
     }
