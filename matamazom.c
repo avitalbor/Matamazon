@@ -99,7 +99,8 @@ static Product copyProduct(Product product){
     if(!newProdcut){
         return NULL;
     }
-    strcpy(newProdcut->name,product->name);
+    //strcpy(newProdcut->name,product->name);
+    newProdcut->name=strdup(product->name);
     newProdcut->id=product->id;
     newProdcut->amount_type=product->amount_type;
     newProdcut->income=product->income;
@@ -367,7 +368,7 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
         freeProducts(newProduct);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
-    newProduct->name=strcpy(newProduct->name,name);
+    newProduct->name=strdup(name);
 
     newProduct->copy_function=copyData;
     newProduct->free_function=freeData;

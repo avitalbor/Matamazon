@@ -79,6 +79,7 @@ static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Containe
         return NULL;
     }
     Container_copy->element = set->copyElement(Container->element);
+
     Container_copy->quantity = Container->quantity;
     Container_copy->nextContainer = NULL;
     Last_Container->nextContainer = Container_copy;
@@ -95,6 +96,7 @@ AmountSet asCopy(AmountSet set){
         free(set_copy);
         return NULL;
     }
+    printf("hello");
     dummyContainer_copy->quantity=0;
     dummyContainer_copy->nextContainer=NULL;
     set_copy->copyElement = set->copyElement;
@@ -103,6 +105,10 @@ AmountSet asCopy(AmountSet set){
     set_copy->amountSetContainer = dummyContainer_copy;
     set_copy->iterator = NULL;
     set_copy->size_of_Set = 0;
+
+
+
+
     Set_Container tmp = dummyContainer_copy;
     AS_FOREACH(ASElement ,currentElement,set){
         if(scCopy(set_copy, currentElement, tmp) == NULL){
@@ -130,10 +136,12 @@ bool asContains(AmountSet set, ASElement element)
     if(!set){
         return false;
     }
-    AS_FOREACH(ASElement ,currentElement,set){
-        if(set->compareAsElements(currentElement,element)==0){
+    Set_Container current_container=set->amountSetContainer->nextContainer;
+    while (current_container){
+        if(set->compareAsElements(current_container->element,element)==0){
             return true;
         }
+        current_container=current_container->nextContainer;
     }
     return false;
 }
@@ -153,15 +161,7 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
         }
         tmp=tmp->nextContainer;
     }
-    /*Set_Container tmp = set->iterator;
-    AS_FOREACH(ASElement ,currentElement,set){
-        if(set->compareAsElements(currentElement,element)==0){
-            *outAmount = set->iterator->quantity;
-        }
-        break;
-    }
-    set->iterator = tmp;
-    return AS_SUCCESS;*/
+
 }
 
 AmountSetResult asRegister(AmountSet set, ASElement element){
@@ -177,7 +177,12 @@ AmountSetResult asRegister(AmountSet set, ASElement element){
         return AS_OUT_OF_MEMORY;
     }
     newContainer->quantity=0;
-    newContainer->element=element;
+    newContainer->element=set->copyElement(element);
+    if(!newContainer->element){
+        free(newContainer);
+        return AS_OUT_OF_MEMORY;
+    }
+    newContainer->nextContainer=NULL;
     set->size_of_Set=set->size_of_Set+1;
     if(!(set->amountSetContainer->nextContainer)){
         set->amountSetContainer->nextContainer=newContainer;
@@ -217,7 +222,6 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
         }
         tmp=tmp->nextContainer;
     }
-    //should not get here
 }
 
 AmountSetResult asDelete(AmountSet set, ASElement element){
@@ -233,7 +237,7 @@ AmountSetResult asDelete(AmountSet set, ASElement element){
         tmp1=tmp1->nextContainer;
     }
     assert(set->compareAsElements(tmp1->nextContainer->element,element)==0);
-    tmp2=tmp1->nextContainer->nextContainer;
+    tmp2=(tmp1->nextContainer)->nextContainer;
     set->freeAsElement(tmp1->nextContainer->element);
     free(tmp1->nextContainer);
     tmp1->nextContainer=tmp2;

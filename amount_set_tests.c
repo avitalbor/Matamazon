@@ -40,17 +40,16 @@ bool testModify() {
     AmountSet set = asCreate(copyInt, freeInt, compareInts);
     int ids[7] = {0, 4, 2, 5, 7, 3, 1};
     for (int i = 0; i < 7; ++i) {
-        printf("1 \n");
+
         ASSERT_OR_DESTROY(asRegister(set, ids + i) == AS_SUCCESS);
-        printf("we succeed\n");
     }
 
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 2, 10.5) == AS_SUCCESS);
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 1, 3) == AS_SUCCESS);
-    printf("helllllo");
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 1, -17) == AS_INSUFFICIENT_AMOUNT);
-    printf("fixed this\n");
     ASSERT_OR_DESTROY(asDelete(set, ids + 3) == AS_SUCCESS);
+
+    printf("why??");
 
     asDestroy(set);
     return true;
@@ -59,6 +58,7 @@ bool testModify() {
 static void addElements(AmountSet set) {
     int ids[7] = {0, 4, 2, 5, 7, 3, 1};
     for (int i = 0; i < 7; ++i) {
+
         asRegister(set, ids + i);
     }
     asChangeAmount(set, ids + 2, 10.5);
@@ -85,9 +85,11 @@ static void destroyAmountSets(AmountSet set1, AmountSet set2) {
 bool testCopy() {
     AmountSet set = asCreate(copyInt, freeInt, compareInts);
     addElements(set);
+    printf("why so sad\n");
     AmountSet copy = asCopy(set);
     ASSERT_OR_DESTROY(copy != NULL);
     int x = 2;
+    printf("love me like you do\n");
     ASSERT_TEST_WITH_FREE(asDelete(copy, &x) == AS_SUCCESS, destroyAmountSets(set, copy));
     ASSERT_TEST_WITH_FREE(asContains(set, &x), destroyAmountSets(set, copy));
     asDestroy(copy);
