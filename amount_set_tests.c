@@ -49,7 +49,6 @@ bool testModify() {
     ASSERT_OR_DESTROY(asChangeAmount(set, ids + 1, -17) == AS_INSUFFICIENT_AMOUNT);
     ASSERT_OR_DESTROY(asDelete(set, ids + 3) == AS_SUCCESS);
 
-    printf("why??");
 
     asDestroy(set);
     return true;
@@ -85,11 +84,10 @@ static void destroyAmountSets(AmountSet set1, AmountSet set2) {
 bool testCopy() {
     AmountSet set = asCreate(copyInt, freeInt, compareInts);
     addElements(set);
-    printf("why so sad\n");
     AmountSet copy = asCopy(set);
     ASSERT_OR_DESTROY(copy != NULL);
     int x = 2;
-    printf("love me like you do\n");
+
     ASSERT_TEST_WITH_FREE(asDelete(copy, &x) == AS_SUCCESS, destroyAmountSets(set, copy));
     ASSERT_TEST_WITH_FREE(asContains(set, &x), destroyAmountSets(set, copy));
     asDestroy(copy);

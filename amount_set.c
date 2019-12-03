@@ -73,17 +73,24 @@ void asDestroy(AmountSet set) {
     }
 }
 
-static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Container Last_Container){
-    Set_Container Container_copy = malloc(sizeof(*Container_copy));
-    if(!Container_copy){
+//static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Container Last_Container){
+
+static Set_Container scCopy(AmountSet set, Set_Container Container){
+    Set_Container container_copy = malloc(sizeof(*container_copy));
+    if(!container_copy){
         return NULL;
     }
-    Container_copy->element = set->copyElement(Container->element);
+    container_copy->element = set->copyElement(Container->element);
 
-    Container_copy->quantity = Container->quantity;
-    Container_copy->nextContainer = NULL;
-    Last_Container->nextContainer = Container_copy;
-    return Container_copy;
+    if(!container_copy){///why ist gray????
+        free(container_copy);
+        return NULL;
+    }
+
+    container_copy->quantity = Container->quantity;
+    container_copy->nextContainer = NULL;
+//    Last_Container->nextContainer = container_copy;
+    return container_copy;
 }
 
 AmountSet asCopy(AmountSet set){
@@ -96,7 +103,6 @@ AmountSet asCopy(AmountSet set){
         free(set_copy);
         return NULL;
     }
-    printf("hello");
     dummyContainer_copy->quantity=0;
     dummyContainer_copy->nextContainer=NULL;
     set_copy->copyElement = set->copyElement;
@@ -108,7 +114,19 @@ AmountSet asCopy(AmountSet set){
 
 
 
+    Set_Container tmp = set->amountSetContainer->nextContainer;
+    Set_Container current_container_of_copy=set_copy->amountSetContainer;
 
+    while (tmp){
+        current_container_of_copy->nextContainer=scCopy(set,tmp);
+        if(!current_container_of_copy->nextContainer){
+            asDestroy(set_copy);
+            return NULL;
+        }
+        tmp=tmp->nextContainer;
+        current_container_of_copy=current_container_of_copy->nextContainer;
+    }
+    /*
     Set_Container tmp = dummyContainer_copy;
     AS_FOREACH(ASElement ,currentElement,set){
         if(scCopy(set_copy, currentElement, tmp) == NULL){
@@ -118,7 +136,7 @@ AmountSet asCopy(AmountSet set){
             return NULL;
         }
         tmp = tmp->nextContainer;
-    }
+    }*/
     set_copy->iterator = NULL;
     set->iterator = NULL;
     return set_copy;
