@@ -2,6 +2,8 @@
 #include "amount_set.h"
 #include <stdlib.h>
 #include <assert.h>
+#define MIN_AMOUNT 0
+
 
 
 //#include <stdio.h>
@@ -32,24 +34,28 @@ AmountSet asCreate(CopyASElement copyElement,
         return NULL;
     }
     assert(set);
-    Set_Container dummyContainer= malloc(sizeof(*dummyContainer));
-    if(!dummyContainer){
+    Set_Container dummy_container= malloc(sizeof(*dummy_container));
+    if(!dummy_container){
         free(set);
         return NULL;
     }
-    assert(dummyContainer);
-    dummyContainer->quantity=0;
-    dummyContainer->nextContainer=NULL;
-    dummyContainer->element=NULL;
+    assert(dummy_container);
+    dummy_container->quantity=0;
+    dummy_container->nextContainer=NULL;
+    dummy_container->element=NULL;
     set->copyElement= copyElement;
     set->compareAsElements= compareElements;
     set->freeAsElement= freeElement;
-    set->amountSetContainer= dummyContainer;
+    set->amountSetContainer= dummy_container;
     set->iterator=NULL;
     set->size_of_Set=0;
 
     return set;
 }
+
+/**
+ * freeElements: frees all the elements and containers of the set except for the dummy container.
+ */
 
 // frees all the elements and containers of the set except for the dummy container
 static void freeElements(AmountSet set){
@@ -74,7 +80,12 @@ void asDestroy(AmountSet set) {
 }
 
 //static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Container Last_Container){
-
+/**
+ * scCopy: receives a set and a container in the set and returns a copy container of the received container
+ * * @return
+ *     NULL if  a memory allocation failed.
+ *     A copy container of the received container
+ */
 static Set_Container scCopy(AmountSet set, Set_Container Container){
     Set_Container container_copy = malloc(sizeof(*container_copy));
     if(!container_copy){
@@ -98,17 +109,17 @@ AmountSet asCopy(AmountSet set){
     if(set_copy == NULL){
         return NULL;
     }
-    Set_Container dummyContainer_copy = malloc(sizeof(*dummyContainer_copy));
-    if(!dummyContainer_copy){
+    Set_Container dummy_container_copy = malloc(sizeof(*dummy_container_copy));
+    if(!dummy_container_copy){
         free(set_copy);
         return NULL;
     }
-    dummyContainer_copy->quantity=0;
-    dummyContainer_copy->nextContainer=NULL;
+    dummy_container_copy->quantity=0;
+    dummy_container_copy->nextContainer=NULL;
     set_copy->copyElement = set->copyElement;
     set_copy->compareAsElements = set->compareAsElements;
     set_copy->freeAsElement = set->freeAsElement;
-    set_copy->amountSetContainer = dummyContainer_copy;
+    set_copy->amountSetContainer = dummy_container_copy;
     set_copy->iterator = NULL;
     set_copy->size_of_Set = 0;
 
@@ -231,7 +242,7 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
     while (tmp){
         if(set->compareAsElements(tmp->element,element)==0)
         {
-            if((tmp->quantity)+amount<0){
+            if((tmp->quantity)+amount<MIN_AMOUNT){
                 return AS_INSUFFICIENT_AMOUNT;
             } else{
                 tmp->quantity=tmp->quantity+amount;
