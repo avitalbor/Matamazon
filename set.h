@@ -195,9 +195,6 @@ SetResult setClear(Set);
 * Macro for iterating over a set.
 * Declares a new iterator for the loop.
 */
-#define SET_FOREACH(type, iterator, set)        \
-    for (type iterator = setGetFirst(set) ;     \
-         iterator ;                             \
-         iterator = setGetNext(set))
+#define SET_FOREACH(type, iterator, set)for (type iterator = setGetFirst(set) ;iterator ;iterator = setGetNext(set))
 
 #endif /* SET_H_ */

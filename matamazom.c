@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-//#include "amount_set.h"
+#include "amount_set.h"
 #include "matamazom.h"
 #include "set.h"
 #include "matamazom_print.h"
@@ -459,7 +459,6 @@ MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
     return MATAMAZOM_SUCCESS;
 }
 
-
 MatamazomResult mtmPrintFiltered(Matamazom matamazom, MtmFilterProduct customFilter, FILE *output){
     if(!matamazom || !customFilter || !output){
         return MATAMAZOM_NULL_ARGUMENT;
@@ -474,4 +473,69 @@ MatamazomResult mtmPrintFiltered(Matamazom matamazom, MtmFilterProduct customFil
         }
     }
     return MATAMAZOM_SUCCESS;
+}
+
+static double getTotalPriceOforder(Order order){
+    double total_price_of_order=0;
+    double price_of_product=0;
+    double amount_of_product_in_order;
+    AS_FOREACH(Product,current_product,order->products_of_order){
+        AmountSetResult result =asGetAmount(order,current_product,&amount_of_product_in_order);
+        assert(result=AS_SUCCESS);
+        priceOfProduct=current_product->get_price_function(current_product->additional_info,1);
+        totalPriceOfOrder=totalPriceOfOrder+price_of_product*amount_of_product_in_order;
+    }
+    return total_price_of_order;
+}
+
+}
+
+
+static void printProductsOfAmountSet(AmountSet set, FILE *output){
+    AS_FOREACH(Product,current_product,set){
+        double amount_of_current_product;
+        AmountSetResult result= asGetAmount(set,current_product,&amount_of_current_product);
+        assert(result=AS_SUCCESS);
+        double price_of_product=current_product->get_price_function(current_product->additional_info,1);
+
+        mtmPrintProductDetails(current_product->name,current_product->id,amount_of_current_product
+                ,price_of_product,output);//check if output her is correct
+}
+
+MatamazomResult mtmPrintInventory(Matamazom matamazom, FILE *output){
+    if(!matamazom || !output){
+        return MATAMAZOM_NULL_ARGUMENT;
+    }
+    fprintf(output,"Inventory Status:\n");
+    printProductsOfAmountSet(matamazom->list_of_products,output);
+    /*AS_FOREACH(Product,current_product,matamazom->list_of_products){
+        double amount_of_current_product;
+        AmountSetResult result= asGetAmount(matamazom->list_of_products,current_product,&amount_of_current_product);
+        assert(result=AS_SUCCESS);
+        double price_of_product=current_product->get_price_function(current_product->additional_info,1);
+
+        mtmPrintProductDetails(current_product->name,current_product->id,amount_of_current_product
+                ,price_of_product,output);//check if output her is correct
+
+    }*/
+    return MATAMAZOM_SUCCESS;
+}
+
+MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, FILE *output){
+
+    if(!matamazom||!output){
+        return MATAMAZOM_NULL_ARGUMENT;
+    }
+
+    SET_FOREACH(Order,current_order,matamazom->set_of_orders){
+        if(current_order->id_of_order==orderId){
+            mtmPrintOrderHeading(orderId,output);
+            printProductsOfAmountSet(current_order->products_of_order,output);
+            double total_price_of_order=getTotalPriceOforder(current_order);
+            //printf("**********\n");
+            mtmPrintOrderSummary(total_price_of_order,output);
+            return AS_SUCCESS;
+        }
+    }
+    return MATAMAZOM_ORDER_NOT_EXIST;
 }
