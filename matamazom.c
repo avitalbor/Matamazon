@@ -430,7 +430,7 @@ MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
 
 
 static void printNoBestSellingProduct(FILE *output){
-    fprintf(output,"Best Selling Product: /n none ");
+    fprintf(output,"Best Selling Product: \nnone ");
 }
 
 MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){

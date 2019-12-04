@@ -79,7 +79,6 @@ void asDestroy(AmountSet set) {
     }
 }
 
-//static Set_Container scCopy(AmountSet set, Set_Container Container, Set_Container Last_Container){
 /**
  * scCopy: receives a set and a container in the set and returns a copy container of the received container
  * * @return
@@ -93,18 +92,20 @@ static Set_Container scCopy(AmountSet set, Set_Container Container){
     }
     container_copy->element = set->copyElement(Container->element);
 
-    if(!container_copy){///why ist gray????
+    if(!container_copy->element){
         free(container_copy);
         return NULL;
     }
 
     container_copy->quantity = Container->quantity;
     container_copy->nextContainer = NULL;
-//    Last_Container->nextContainer = container_copy;
     return container_copy;
 }
 
 AmountSet asCopy(AmountSet set){
+    if(!set){
+        return NULL;
+    }
     AmountSet set_copy = malloc(sizeof(*set_copy));
     if(set_copy == NULL){
         return NULL;
@@ -137,19 +138,9 @@ AmountSet asCopy(AmountSet set){
         tmp=tmp->nextContainer;
         current_container_of_copy=current_container_of_copy->nextContainer;
     }
-    /*
-    Set_Container tmp = dummyContainer_copy;
-    AS_FOREACH(ASElement ,currentElement,set){
-        if(scCopy(set_copy, currentElement, tmp) == NULL){
-            freeElements(set_copy);
-            free(dummyContainer_copy);
-            free(set_copy);
-            return NULL;
-        }
-        tmp = tmp->nextContainer;
-    }*/
     set_copy->iterator = NULL;
     set->iterator = NULL;
+    set_copy->size_of_Set=set->size_of_Set;
     return set_copy;
 }
 
@@ -162,7 +153,7 @@ int asGetSize(AmountSet set){
 
 bool asContains(AmountSet set, ASElement element)
 {
-    if(!set){
+    if(!set || !element){
         return false;
     }
     Set_Container current_container=set->amountSetContainer->nextContainer;
@@ -176,7 +167,7 @@ bool asContains(AmountSet set, ASElement element)
 }
 
 AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount){
-    if(!set || !element || !*outAmount) {
+    if(!set || !element || !outAmount) {
         return AS_NULL_ARGUMENT;
     }
     if(!asContains(set,element)){
@@ -194,10 +185,11 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
 }
 
 AmountSetResult asRegister(AmountSet set, ASElement element){
-    set->iterator = NULL;//because iterator undefinde after calling this function
+
     if(!set || !element){
         return AS_NULL_ARGUMENT;
     }
+    set->iterator = NULL;//because iterator undefinde after calling this function
     if(asContains(set,element)){
         return  AS_ITEM_ALREADY_EXISTS;
     }
@@ -254,6 +246,9 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
 }
 
 AmountSetResult asDelete(AmountSet set, ASElement element){
+    if(!set|| !element){
+        return AS_NULL_ARGUMENT;
+    }
     set->iterator = NULL;
     if(!asContains(set,element)){
         return AS_ITEM_DOES_NOT_EXIST;
@@ -270,7 +265,7 @@ AmountSetResult asDelete(AmountSet set, ASElement element){
     set->freeAsElement(tmp1->nextContainer->element);
     free(tmp1->nextContainer);
     tmp1->nextContainer=tmp2;
-    set->size_of_Set=set->size_of_Set-1;
+    set->size_of_Set=(set->size_of_Set)-1;
     return AS_SUCCESS;
 }
 
