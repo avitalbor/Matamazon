@@ -727,6 +727,7 @@ MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
                                (ASElement)orderProduct, -(orderProduct_amount) == AS_NULL_ARGUMENT)){
                     return MATAMAZOM_NULL_ARGUMENT;
                 }
+                warehouseProduct->income = (warehouseProduct->income) + warehouseProduct->get_price_function(warehouseProduct->additional_info, orderProduct_amount);
                 // assert for product not found or insufficient amount?
             }
         }
