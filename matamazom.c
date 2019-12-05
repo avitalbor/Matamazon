@@ -165,6 +165,9 @@ static int compareForSet(SetElement element1, SetElement element2){
  */
 
 static void freeOrder(Order order){
+    if(!order){
+        return;
+    }
     asDestroy(order->products_of_order);
     free(order);
 }
@@ -370,7 +373,6 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
         return MATAMAZOM_OUT_OF_MEMORY;
     }
     newProduct->name=strdup(name);
-
     newProduct->copy_function=copyData;
     newProduct->free_function=freeData;
     newProduct->get_price_function=prodPrice;
@@ -378,7 +380,7 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
     newProduct->additional_info=customData;
     newProduct->amount_type=amountType;
     AmountSetResult registerNewProduct=asRegister(matamazom->list_of_products,newProduct);
-    assert(registerNewProduct);
+    //assert(registerNewProduct==AS_SUCCESS);
     if (registerNewProduct==AS_ITEM_ALREADY_EXISTS){
         freeProducts(newProduct);
         return MATAMAZOM_PRODUCT_ALREADY_EXIST;
@@ -471,8 +473,8 @@ MatamazomResult mtmPrintFiltered(Matamazom matamazom, MtmFilterProduct customFil
         asGetAmount(matamazom->list_of_products,currentProduct,&amount_Of_Product);
         if(customFilter(currentProduct->id,currentProduct->name,
                         amount_Of_Product,currentProduct->additional_info)){
-            mtmPrintProductDetails(currentProduct->name,
-                    currentProduct->id,amount_Of_Product,currentProduct->get_price_function(currentProduct,1),output);
+            mtmPrintProductDetails(currentProduct->name,currentProduct->id,
+                    amount_Of_Product,currentProduct->get_price_function(currentProduct,1),output);
         }
     }
     return MATAMAZOM_SUCCESS;

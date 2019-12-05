@@ -8,16 +8,17 @@ add_executable(ex1
         amount_set.h
         amount_set.c
         set.h
-        #matamazom_main.c
-        #matamazom_tests.h
-        #matamazom_tests.c
+        libmtm.a
+        matamazom_main.c
+        matamazom_tests.h
+        matamazom_tests.c
         matamazom_print.h
         matamazom_print.c
         matamazom.h
-        matamazom.c)
+        matamazom.c
         #amount_set_tests.h
         #amount_set_tests.c
-        #test_utilities.h
+        test_utilities.h)
         #amount_set_main.c
         #unofficialtestAmountSet.c)
 
