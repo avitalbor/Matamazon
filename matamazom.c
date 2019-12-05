@@ -564,16 +564,26 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
 static Order getOrderFromId(Set set, unsigned int orderId){
     assert(set);
     Order wanted_order = NULL;
+    printf(" \n size of set %d \n",setGetSize(set));
+    Order tmp=setGetFirst(set);
+    if(!tmp){
+        printf("set is  empty\n");
+    }
     SET_FOREACH(Order,currentOrder,set){
+        printf("we are in the for\n");
         if(currentOrder->id_of_order == orderId){
+            printf("yoyo\n");
             wanted_order = currentOrder;
+            return wanted_order;
             assert(wanted_order);
             break;
         }
     }
     if(wanted_order == NULL){
+        printf("yes\n");
         return NULL;
     }
+    printf("aloooon\n");
     return wanted_order;
 }
 
@@ -602,16 +612,27 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
     }
     Order new_order = malloc(sizeof(*new_order));
     if(!new_order){
+        printf("didnt success");
         return 0;
     }
     new_order->products_of_order = NULL;
 
     // put the order in the specific matamazom
     SetResult register_new_order = setAdd(matamazom->set_of_orders, (SetElement)new_order);
+   // SetResult register_new_order = setAdd(matamazom->set_of_orders, new_order;
+   printf("now we are heeeeer\n");
+
+    if(register_new_order==SET_SUCCESS){
+        printf("no\n");
+    }
+
     if(register_new_order != SET_SUCCESS){
         free(new_order);
         return 0;
     }
+    Order tmp=(Order)setGetFirst(matamazom->set_of_orders);
+    assert(tmp);
+
     matamazom->current_order_id=matamazom->current_order_id+1;
     new_order->id_of_order=matamazom->current_order_id;
 
@@ -628,7 +649,9 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
     }
     //get the wanted order
     Order wanted_order = getOrderFromId(matamazom->set_of_orders, orderId);
+    printf("love me\n");
     if(wanted_order == NULL){
+        printf("are we here");
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
     //check if product in warehouse
