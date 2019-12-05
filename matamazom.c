@@ -652,15 +652,14 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
         assert(change_result != AS_NULL_ARGUMENT);
         if(change_result == AS_INSUFFICIENT_AMOUNT){
             AmountSetResult delete_result = asDelete(wanted_order->products_of_order, (ASElement)product_in_order);
-            assert(!= AS_NULL_ARGUMENT);
+            assert(delete_result != AS_NULL_ARGUMENT);
         }
-        unsigned int amount_of_product_in_order;
+        double amount_of_product_in_order;
         AmountSetResult getAmount_result = asGetAmount(wanted_order->products_of_order, (ASElement)product_in_order, &amount_of_product_in_order);
         assert(getAmount_result != AS_NULL_ARGUMENT);
         if(amount_of_product_in_order == 0){
             AmountSetResult delete_result = asDelete(wanted_order->products_of_order, (ASElement)product_in_order);
             assert(delete_result != AS_NULL_ARGUMENT);
-            }
         }
     }
     return MATAMAZOM_SUCCESS;
