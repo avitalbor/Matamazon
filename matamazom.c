@@ -17,6 +17,7 @@
 typedef struct Matamazom_t {
     AmountSet  list_of_products;
     Set set_of_orders;
+    unsigned  int current_order_id;
 };
 
 typedef struct product{
@@ -223,6 +224,7 @@ static SetElement copyForSet(SetElement element){
 
 
 
+
 Matamazom matamazomCreate(){
     Matamazom warehouse=malloc(sizeof(*warehouse));
     if(!warehouse){
@@ -239,6 +241,7 @@ Matamazom matamazomCreate(){
         free(warehouse);
         return NULL;
     }
+    warehouse->current_order_id=0;
     return warehouse;
 }
 
@@ -614,6 +617,8 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
         free(new_order);
         return 0;
     }
+    matamazom->current_order_id=matamazom->current_order_id+1;
+    new_order->id_of_order=matamazom->current_order_id;
 
     return new_order->id_of_order;
 }
