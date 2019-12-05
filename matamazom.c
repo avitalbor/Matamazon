@@ -487,7 +487,7 @@ static double getTotalPriceOforder(Order order){
     double amount_of_product_in_order;
     AS_FOREACH(Product,current_product,order->products_of_order){
         AmountSetResult result =asGetAmount(order->products_of_order,current_product,&amount_of_product_in_order);
-        assert(result=AS_SUCCESS);
+        assert(result == AS_SUCCESS);
         price_of_product=current_product->get_price_function(current_product->additional_info,1);
         total_price_of_order=total_price_of_order+price_of_product*amount_of_product_in_order;
     }
