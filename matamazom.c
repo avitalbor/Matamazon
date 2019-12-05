@@ -444,7 +444,6 @@ MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
         return MATAMAZOM_SUCCESS;
     }
     double max_income=bestSellingProduct->income;
-    Product tmpProduct=asGetFirst(matamazom->list_of_products);
     AS_FOREACH(Product,currentProduct,matamazom->list_of_products)
     {
         if((currentProduct->income)>(bestSellingProduct->income)){
@@ -570,7 +569,7 @@ static Order getOrderFromId(Set set, unsigned int orderId){
         }
     }
     if(wanted_order == NULL){
-        return MATAMAZOM_ORDER_NOT_EXIST;
+        return NULL;
     }
     return wanted_order;
 }
@@ -586,7 +585,7 @@ static Product getProductFromId(AmountSet set, unsigned int productId){
         }
     }
     if(wanted_product == NULL){
-        return MATAMAZOM_PRODUCT_NOT_EXIST;
+        return NULL;
     }
     return wanted_product;
 }
@@ -599,14 +598,6 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
     }
     Order new_order = malloc(sizeof(*new_order));
     if(!new_order){
-        return 0;
-    }
-
-    // get the size of the last order and put next number on this order's id
-    unsigned int id_of_order = setGetSize(matamazom->set_of_orders) + 1;
-    // check the getSize return value
-    if(id_of_order < 0){
-        free(new_order);
         return 0;
     }
     new_order->products_of_order = NULL;
