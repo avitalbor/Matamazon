@@ -301,9 +301,9 @@ static double absOfNum(double num){
  */
 
 static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amount){
-    if(amount<0){
+    /*if(amount<0){
         return false;
-    }
+    }*/
     if(amountType==MATAMAZOM_ANY_AMOUNT){
         return true;
     }
@@ -355,7 +355,7 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
     if(!checkIfNameIsValid(name)){
         return MATAMAZOM_INVALID_NAME;
     }
-    if(!checkIfAmountIsValid(amountType,amount)){
+    if(!checkIfAmountIsValid(amountType,amount)||amount<0){
         return MATAMAZOM_INVALID_AMOUNT;
     }
     Product newProduct=malloc(sizeof(*newProduct));
@@ -401,11 +401,14 @@ MatamazomResult mtmChangeProductAmount(Matamazom matamazom, const unsigned int i
         wantedProduct=asGetNext(matamazom->list_of_products);
         assert(wantedProduct);
     }
-    double  *originalAmount;
-    asGetAmount(matamazom->list_of_products,wantedProduct,originalAmount);
-    double newAmount=*originalAmount + amount;
+    double  originalAmount;
+    asGetAmount(matamazom->list_of_products,wantedProduct,&originalAmount);
+    double newAmount=originalAmount + amount;
     if(!checkIfAmountIsValid(wantedProduct->amount_type,newAmount)){
         return MATAMAZOM_INVALID_AMOUNT;
+    }
+    if(newAmount<0){
+        return MATAMAZOM_INSUFFICIENT_AMOUNT;
     }
     asChangeAmount(matamazom->list_of_products,wantedProduct,amount);
     return MATAMAZOM_SUCCESS;
@@ -551,9 +554,6 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
 
 
 
-
-
-
 // Alon's Functions
 
 
@@ -563,7 +563,7 @@ static Order getOrderFromId(Set set, unsigned int orderId){
     Order wanted_order = NULL;
     SET_FOREACH(Order,currentOrder,set){
         if(currentOrder->id_of_order == orderId){
-            wanted_order = (Order)currentOrder;
+            wanted_order = currentOrder;
             assert(wanted_order);
             break;
         }
@@ -579,7 +579,7 @@ static Product getProductFromId(AmountSet set, unsigned int productId){
     Product wanted_product = NULL;
     AS_FOREACH(Product,currentProduct,set){
         if(currentProduct->id == productId){
-            wanted_product = (Product)currentProduct;
+            wanted_product = currentProduct;
             assert(wanted_product);
             break;
         }
@@ -700,8 +700,30 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
     return MATAMAZOM_SUCCESS;
 }
 
+/**
+ * checkIfOrderIsValid: checks if the amount of all the products in the order are valid
+ * @return:
+ * false-  if the amount of one product in the order is bigger than the amount in matamazom
+ * true -if the amount of all the products is valid
+ */
 
 
+static bool checkIfOrderIsValid(Matamazom matamazom, Order order) {
+    assert(matamazom && order);
+    double amount_in_matamazom;
+    double amount_in_order;
+    AmountSetResult get_amount;
+    AS_FOREACH(Product, orderProduct, order->products_of_order) {
+        get_amount=asGetAmount(matamazom->list_of_products,orderProduct,&amount_in_matamazom);
+        assert(get_amount=AS_SUCCESS);
+        get_amount=asGetAmount(order->products_of_order,orderProduct,&amount_in_order);
+        assert(get_amount=AS_SUCCESS);
+        if(amount_in_order>amount_in_matamazom){
+            return false;
+        }
+    }
+    return true;
+}
 
 MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
     if(!matamazom || !orderId){
@@ -709,68 +731,50 @@ MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
     }
 
     //get the order
-    Order wanted_order = NULL;
-    SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
-        if(currentOrder->id_of_order == orderId){
-            wanted_order = (Order)currentOrder;
-            assert(wanted_order);
-            break;
-        }
-    }
+    Order wanted_order =getOrderFromId(matamazom->set_of_orders,orderId);
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
 
-    //assert if product is in order and not in warehouse?
 
     // check if the amounts are ok and if not - dont do anything and return insufficient
-    AS_FOREACH(Product,orderProduct,wanted_order->products_of_order){
-        AS_FOREACH(Product, warehouseProduct, matamazom->list_of_products){
-            if (orderProduct->id == warehouseProduct->id){
-                double orderProduct_amount, warehouseProduct_amount;
-                if(asGetAmount(wanted_order->products_of_order,
-                            (ASElement)orderProduct, &orderProduct_amount) == AS_NULL_ARGUMENT){
-                    return MATAMAZOM_NULL_ARGUMENT;
-                }
-                if(asGetAmount(matamazom->list_of_products,
-                            (ASElement)warehouseProduct,
-                            &warehouseProduct_amount) == AS_NULL_ARGUMENT){
-                    return MATAMAZOM_NULL_ARGUMENT;
-                }
-                // assert for product not found?
-                if (orderProduct_amount > warehouseProduct_amount){
-                    return MATAMAZOM_INSUFFICIENT_AMOUNT;
-                }
-            }
-        }
+    if(!checkIfOrderIsValid(matamazom,wanted_order)){
+        return MATAMAZOM_INSUFFICIENT_AMOUNT;
     }
 
-
     // now the order is ok - substract all amounts from the warehouse
+    double amount_of_product_in_order;
+    Product warehouse_product;
     AS_FOREACH(Product,orderProduct,wanted_order->products_of_order){
-        AS_FOREACH(Product, warehouseProduct, matamazom->list_of_products){
-            if (orderProduct->id == warehouseProduct->id){
-                double orderProduct_amount;
-                if(asGetAmount(wanted_order->products_of_order,
-                            (ASElement)orderProduct, &orderProduct_amount) == AS_NULL_ARGUMENT){
-                    return MATAMAZOM_NULL_ARGUMENT;
-                }
-                if(asChangeAmount(matamazom->list_of_products,
-                               (ASElement)orderProduct, -(orderProduct_amount) == AS_NULL_ARGUMENT)){
-                    return MATAMAZOM_NULL_ARGUMENT;
-                }
-                warehouseProduct->income = (warehouseProduct->income) + warehouseProduct->get_price_function(warehouseProduct->additional_info, orderProduct_amount);
-                // assert for product not found or insufficient amount?
-            }
-        }
+        asGetAmount(wanted_order->products_of_order,orderProduct,&amount_of_product_in_order);
+        asChangeAmount(matamazom->list_of_products,orderProduct,-amount_of_product_in_order);
+        warehouse_product=getProductFromId(matamazom->list_of_products,orderProduct->id);
+        assert(warehouse_product);
+        warehouse_product->income=(warehouse_product->income)
+                +warehouse_product->get_price_function(warehouse_product->additional_info,amount_of_product_in_order);
     }
 
     // delete order after changing amounts
     mtmCancelOrder(matamazom, orderId);
-    // need NULL check?
-
     return MATAMAZOM_SUCCESS;
 }
+/*AS_FOREACH(Product,orderProduct,wanted_order->products_of_order){
+       AS_FOREACH(Product, warehouseProduct, matamazom->list_of_products){
+           if (orderProduct->id == warehouseProduct->id){
+               double orderProduct_amount;
+               if(asGetAmount(wanted_order->products_of_order,
+                           (ASElement)orderProduct, &orderProduct_amount) == AS_NULL_ARGUMENT){
+                   return MATAMAZOM_NULL_ARGUMENT;
+               }
+               if(asChangeAmount(matamazom->list_of_products,
+                              (ASElement)orderProduct, -(orderProduct_amount) == AS_NULL_ARGUMENT)){
+                   return MATAMAZOM_NULL_ARGUMENT;
+               }
+               warehouseProduct->income = (warehouseProduct->income) + warehouseProduct->get_price_function(warehouseProduct->additional_info, orderProduct_amount);
+               // assert for product not found or insufficient amount?
+           }
+       }
+   }*/
 
 
 MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
