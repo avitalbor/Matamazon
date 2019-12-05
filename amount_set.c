@@ -92,10 +92,12 @@ static Set_Container scCopy(AmountSet set, Set_Container Container){
     }
     container_copy->element = set->copyElement(Container->element);
 
+    // in case the copyElement function returns a NULL argument
     if(!container_copy->element){
         free(container_copy);
         return NULL;
     }
+
 
     container_copy->quantity = Container->quantity;
     container_copy->nextContainer = NULL;
@@ -123,8 +125,6 @@ AmountSet asCopy(AmountSet set){
     set_copy->amountSetContainer = dummy_container_copy;
     set_copy->iterator = NULL;
     set_copy->size_of_Set = 0;
-
-
 
     Set_Container tmp = set->amountSetContainer->nextContainer;
     Set_Container current_container_of_copy=set_copy->amountSetContainer;
