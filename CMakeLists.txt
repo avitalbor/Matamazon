@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 99)
 set(GCC_COVERAGE_COMPILE_FLAGS "-L. -lmtm ")
 
 add_executable(ex1
+        #main.c)
         amount_set.h
         amount_set.c
         set.h
@@ -15,10 +16,10 @@ add_executable(ex1
         matamazom_print.h
         matamazom_print.c
         matamazom.h
-        matamazom.c
+        matamazom.c)
         #amount_set_tests.h
         #amount_set_tests.c
-        test_utilities.h)
+        #test_utilities.h)
         #amount_set_main.c
         #unofficialtestAmountSet.c)
 

@@ -139,7 +139,10 @@ bool testModifyOrders() {
                       mtmChangeProductAmountInOrder(mtm, order2, 6, 10.25));
     ASSERT_OR_DESTROY(MATAMAZOM_SUCCESS ==
                       mtmChangeProductAmountInOrder(mtm, order2, 7, 1.5));
+    printf("please  me like you do\n");
+
     ASSERT_OR_DESTROY(MATAMAZOM_SUCCESS == mtmCancelOrder(mtm, order1));
+    printf("love me like you do\n");
     ASSERT_OR_DESTROY(MATAMAZOM_SUCCESS ==
                       mtmChangeProductAmountInOrder(mtm, order2, 10, 2.0));
     ASSERT_OR_DESTROY(MATAMAZOM_SUCCESS == mtmShipOrder(mtm, order2));
