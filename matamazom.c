@@ -698,19 +698,15 @@ MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
     if(!matamazom){
         return MATAMAZOM_NULL_ARGUMENT;
     }
-
     //get the order
     Order wanted_order =getOrderFromId(matamazom->set_of_orders,orderId);
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
-
-
     // check if the amounts are ok and if not - dont do anything and return insufficient
     if(!checkIfOrderIsValid(matamazom,wanted_order)){
         return MATAMAZOM_INSUFFICIENT_AMOUNT;
     }
-
     // now the order is ok - substract all amounts from the warehouse
     double amount_of_product_in_order;
     Product warehouse_product;
@@ -722,7 +718,6 @@ MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
         warehouse_product->income=(warehouse_product->income)
                 +warehouse_product->get_price_function(warehouse_product->additional_info,amount_of_product_in_order);
     }
-
     // delete order after changing amounts
     mtmCancelOrder(matamazom, orderId);
     return MATAMAZOM_SUCCESS;
@@ -733,7 +728,6 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
     if(!matamazom){
         return MATAMAZOM_NULL_ARGUMENT;
     }
-
     //get the order
     Order wanted_order = NULL;
     SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
@@ -746,13 +740,10 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
-
     // delete the order
     asDestroy(wanted_order->products_of_order);
-    if(setRemove(matamazom->set_of_orders, (SetElement)wanted_order) == SET_NULL_ARGUMENT){
-        return MATAMAZOM_NULL_ARGUMENT;
-    }
-
+    SetResult remove_result = setRemove(matamazom->set_of_orders, (SetElement)wanted_order);
+    assert(remove_result != SET_NULL_ARGUMENT);
     return MATAMAZOM_SUCCESS;
 }
 
