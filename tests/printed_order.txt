@@ -1,0 +1,4 @@
+Order 1 Details:
+name: Onion, id: 6, amount: 10.250, price: 5.800
+name: Watermelon, id: 7, amount: 1.500, price: 18.500
+name: Television, id: 10, amount: 2.000, price: 2000.000

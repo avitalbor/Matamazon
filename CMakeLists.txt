@@ -5,7 +5,6 @@ set(CMAKE_C_STANDARD 99)
 set(GCC_COVERAGE_COMPILE_FLAGS "-L. -lmtm ")
 
 add_executable(ex1
-        #main.c)
         amount_set.h
         amount_set.c
         set.h

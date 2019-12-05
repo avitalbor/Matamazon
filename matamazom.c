@@ -699,9 +699,10 @@ static bool checkIfOrderIsValid(Matamazom matamazom, Order order) {
     AmountSetResult get_amount;
     AS_FOREACH(Product, orderProduct, order->products_of_order) {
         get_amount=asGetAmount(matamazom->list_of_products,orderProduct,&amount_in_matamazom);
-        assert(get_amount=AS_SUCCESS);
+
+        assert(get_amount==AS_SUCCESS);
         get_amount=asGetAmount(order->products_of_order,orderProduct,&amount_in_order);
-        assert(get_amount=AS_SUCCESS);
+        assert(get_amount==AS_SUCCESS);
         if(amount_in_order>amount_in_matamazom){
             return false;
         }
@@ -725,9 +726,15 @@ MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
     // now the order is ok - substract all amounts from the warehouse
     double amount_of_product_in_order;
     Product warehouse_product;
+
+    AmountSetResult result;
+
     AS_FOREACH(Product,orderProduct,wanted_order->products_of_order){
-        asGetAmount(wanted_order->products_of_order,orderProduct,&amount_of_product_in_order);
-        asChangeAmount(matamazom->list_of_products,orderProduct,-amount_of_product_in_order);
+        result=asGetAmount(wanted_order->products_of_order,orderProduct,&amount_of_product_in_order);
+        assert(result==AS_SUCCESS);
+        result=asChangeAmount(matamazom->list_of_products,orderProduct,-amount_of_product_in_order);
+        assert(result==AS_SUCCESS);
+
         warehouse_product=getProductFromId(matamazom->list_of_products,orderProduct->id);
         assert(warehouse_product);
         warehouse_product->income=(warehouse_product->income)
@@ -744,20 +751,21 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
         return MATAMAZOM_NULL_ARGUMENT;
     }
     //get the order
-    Order wanted_order = NULL;
+    Order wanted_order=getOrderFromId(matamazom->set_of_orders,orderId);
+    /*Order wanted_order = NULL;
     SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
         if(currentOrder->id_of_order == orderId){
             wanted_order = (Order)currentOrder;
             assert(wanted_order);
             break;
         }
-    }
+    }*/
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
-    // delete the order
-    asDestroy(wanted_order->products_of_order);
+    //asDestroy(wanted_order->products_of_order); the removes makes care of the destroy
     assert(wanted_order);
+    assert(matamazom->set_of_orders);
     SetResult remove_result = setRemove(matamazom->set_of_orders, (SetElement)wanted_order);
     assert(remove_result != SET_NULL_ARGUMENT);
     return MATAMAZOM_SUCCESS;

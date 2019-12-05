@@ -59,6 +59,9 @@ AmountSet asCreate(CopyASElement copyElement,
 
 // frees all the elements and containers of the set except for the dummy container
 static void freeElements(AmountSet set){
+    if(!set ||!set->amountSetContainer){
+        return;
+    }
     assert(set);
     assert(set->amountSetContainer!=NULL);
     while((set->amountSetContainer->nextContainer)!=NULL){
@@ -171,6 +174,7 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
         return AS_NULL_ARGUMENT;
     }
     if(!asContains(set,element)){
+
         return AS_ITEM_DOES_NOT_EXIST;
     }
     Set_Container tmp = set->amountSetContainer->nextContainer;
