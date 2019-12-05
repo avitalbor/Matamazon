@@ -95,19 +95,19 @@ static void freeForAmountSet(ASElement element)
  * The duplicated Product if the function was successful
  */
 static Product copyProduct(Product product){
-    Product newProdcut=malloc(sizeof(*newProduct));
-    if(!newProdcut){
+    Product newProduct=malloc(sizeof(*newProduct));
+    if(!newProduct){
         return NULL;
     }
     //strcpy(newProdcut->name,product->name);
-    newProdcut->name=strdup(product->name);
-    newProdcut->id=product->id;
-    newProdcut->amount_type=product->amount_type;
-    newProdcut->income=product->income;
-    newProdcut->copy_function=product->copy_function;
-    newProdcut->free_function=product->free_function;
-    newProdcut->additional_info=product->copy_function(product->additional_info);
-    return newProdcut;
+    newProduct->name=strdup(product->name);
+    newProduct->id=product->id;
+    newProduct->amount_type=product->amount_type;
+    newProduct->income=product->income;
+    newProduct->copy_function=product->copy_function;
+    newProduct->free_function=product->free_function;
+    newProduct->additional_info=product->copy_function(product->additional_info);
+    return newProduct;
 }
 
 
@@ -556,7 +556,7 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
 
 unsigned int mtmCreateNewOrder(Matamazom matamazom){
     if(!matamazom){
-        return 0
+        return 0;
     }
     Order new_order = malloc(sizeof(*new_order));
     if(!new_order){
@@ -573,13 +573,13 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
     new_order->products_of_order = NULL;
 
     // put the order in the specific matamazom
-    SetResult register_new_order = setAdd(matamazom->set_of_orders, (SetElement)new_order;
+    SetResult register_new_order = setAdd(matamazom->set_of_orders, (SetElement)new_order);
     if(register_new_order != SET_SUCCESS){
         free(new_order);
         return 0;
     }
 
-    return Order->id_of_order;
+    return new_order->id_of_order;
 }
 
 
@@ -610,7 +610,7 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
     //get the wanted order
     Order wanted_order = NULL;
     SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
-        if(currentOrder->id == orderId){
+        if(currentOrder->id_of_order == orderId){
             wanted_order = (Order)currentOrder;
             assert(wanted_order);
             break;
@@ -724,7 +724,7 @@ MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
                     return MATAMAZOM_NULL_ARGUMENT;
                 }
                 if(asChangeAmount(matamazom->list_of_products,
-                               (ASElement)orderProduct, -(orderProduct_amount) == AS_NULL_ARGUMENT){
+                               (ASElement)orderProduct, -(orderProduct_amount) == AS_NULL_ARGUMENT)){
                     return MATAMAZOM_NULL_ARGUMENT;
                 }
                 // assert for product not found or insufficient amount?
