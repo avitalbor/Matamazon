@@ -619,38 +619,87 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
 
 MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigned int orderId,
                                               const unsigned int productId, const double amount){
-    /* check if in list of products
-
-    get product name + convert to element
-    matamazom->list_of_products
-    id== productId
-
-    if(asContains(matamazom->list_of_products, ) != true){
-        return MATAMAZOM_PRODUCT_NOT_EXIST;
-    }
-    if(setIsIn(matazom)){
-
-    }
-    */
-
-
-    // check if in list of products
-    if(!checkIfIdOfProductExists(matamazom, productId)){
-        return MATAMAZOM_PRODUCT_NOT_EXIST;
-    }
-
     //get the wanted order
-    Order wanted_order = NULL;
-    SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
-        if(currentOrder->id_of_order == orderId){
-            wanted_order = (Order)currentOrder;
-            assert(wanted_order);
-            break;
-        }
-    }
+    Order wanted_order = getOrderFromId(matamazom->set_of_orders, orderId);
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
+    //check if product in warehouse
+    Product product_in_warehouse = getProductFromId(matamazom->list_of_products, productId);
+    if(product_in_warehouse == NULL){
+        return MATAMAZOM_PRODUCT_NOT_EXIST;
+    }
+    if(!checkIfAmountIsValid(product_in_warehouse->amount_type, amount)){
+        return MATAMAZOM_INVALID_AMOUNT;
+    }
+    //check if product is in order
+    Product product_in_order = getProductFromId(wanted_order->products_of_order, productId);
+    if(product_in_order == NULL){
+        if(amount > 0){
+            if(asRegister(wanted_order->products_of_order, (ASElement)product_in_order) == AS_NULL_ARGUMENT){
+                return MATAMAZOM_NULL_ARGUMENT;
+            }
+            if(asChangeAmount(wanted_order->products_of_order, product_in_order, amount) == AS_NULL_ARGUMENT){
+                return MATAMAZOM_NULL_ARGUMENT;
+            }
+        }
+    }
+    else{
+        AmountSetResult change_result = asChangeAmount(wanted_order->products_of_order, (ASElement)product_in_order, amount);
+        if(change_result == AS_NULL_ARGUMENT){
+            return MATAMAZOM_NULL_ARGUMENT;
+        }
+        else if(change_result == AS_INSUFFICIENT_AMOUNT){
+            if(asDelete(wanted_order->products_of_order, (ASElement)product_in_order) == AS_NULL_ARGUMENT){
+                return MATAMAZOM_NULL_ARGUMENT;
+            }
+        }
+        unsigned int amount_of_product_in_order;
+        AmountSetResult getAmount_result = asGetAmount(wanted_order->products_of_order, (ASElement)product_in_order, &amount_of_product_in_order);
+        if(getAmount_result == AS_NULL_ARGUMENT){
+            return MATAMAZOM_NULL_ARGUMENT;
+        }
+        if(amount_of_product_in_order == 0){
+            if(asDelete(wanted_order->products_of_order, (ASElement)product_in_order) == AS_NULL_ARGUMENT){
+                return MATAMAZOM_NULL_ARGUMENT;
+            }
+        }
+    }
+    return MATAMAZOM_SUCCESS;
+}
+
+
+
+
+
+
+
+/* check if in list of products
+
+get product name + convert to element
+matamazom->list_of_products
+id== productId
+
+if(asContains(matamazom->list_of_products, ) != true){
+    return MATAMAZOM_PRODUCT_NOT_EXIST;
+}
+if(setIsIn(matazom)){
+
+}
+*/
+
+/*
+// check if in list of products
+if(!checkIfIdOfProductExists(matamazom, productId)){
+    return MATAMAZOM_PRODUCT_NOT_EXIST;
+}
+*/
+
+
+
+
+
+/*
 
     // if product is in order
     // to think about the "if item in set" and then remove the "find product" part
@@ -697,8 +746,8 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
         }
     }
 
-    return MATAMAZOM_SUCCESS;
-}
+    */
+
 
 /**
  * checkIfOrderIsValid: checks if the amount of all the products in the order are valid
