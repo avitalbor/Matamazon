@@ -107,6 +107,7 @@ static Product copyProduct(Product product){
     newProduct->income=product->income;
     newProduct->copy_function=product->copy_function;
     newProduct->free_function=product->free_function;
+    newProduct->get_price_function=product->get_price_function;
     newProduct->additional_info=product->copy_function(product->additional_info);
     return newProduct;
 }
@@ -500,7 +501,7 @@ static void printProductsOfAmountSet(AmountSet set, FILE *output){
     AS_FOREACH(Product,current_product,set) {
         double amount_of_current_product;
         AmountSetResult result = asGetAmount(set, current_product, &amount_of_current_product);
-        assert(result = AS_SUCCESS);
+        assert(result == AS_SUCCESS);
         double price_of_product = current_product->get_price_function(current_product->additional_info, 1);
 
         mtmPrintProductDetails(current_product->name, current_product->id, amount_of_current_product, price_of_product,
@@ -572,10 +573,8 @@ static Order getOrderFromId(Set set, unsigned int orderId){
         }
     }
     if(wanted_order == NULL){
-        printf("yes\n");
         return NULL;
     }
-    printf("aloooon\n");
     return wanted_order;
 }
 
@@ -644,7 +643,6 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
     //get the wanted order
     Order wanted_order = getOrderFromId(matamazom->set_of_orders, orderId);
     if(wanted_order == NULL){
-        printf("are we here");
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
     //check if product in warehouse
@@ -747,7 +745,6 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
     }
     //get the order
     Order wanted_order = NULL;
-    printf("idan\n");
     SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
         if(currentOrder->id_of_order == orderId){
             wanted_order = (Order)currentOrder;
@@ -755,17 +752,13 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
             break;
         }
     }
-    printf("finished for\n");
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
     // delete the order
-    printf("yyyyyyeeess\n");
     asDestroy(wanted_order->products_of_order);
-    printf("success\n");
     assert(wanted_order);
     SetResult remove_result = setRemove(matamazom->set_of_orders, (SetElement)wanted_order);
-    printf("2\n");
     assert(remove_result != SET_NULL_ARGUMENT);
     return MATAMAZOM_SUCCESS;
 }
