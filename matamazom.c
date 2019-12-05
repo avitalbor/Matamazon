@@ -554,6 +554,42 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
 
 // Alon's Functions
 
+
+
+/** NEEDS CLARIFYING */
+static Order getOrderFromId(Set set, unsigned int orderId){
+    Order wanted_order = NULL;
+    SET_FOREACH(Order,currentOrder,set){
+        if(currentOrder->id_of_order == orderId){
+            wanted_order = (Order)currentOrder;
+            assert(wanted_order);
+            break;
+        }
+    }
+    if(wanted_order == NULL){
+        return MATAMAZOM_ORDER_NOT_EXIST;
+    }
+    return wanted_order;
+}
+
+/** NEEDS CLARIFYING */
+static Product getProductFromId(AmountSet set, unsigned int productId){
+    Product wanted_product = NULL;
+    AS_FOREACH(Product,currentProduct,set){
+        if(currentProduct->id == productId){
+            wanted_product = (Product)currentProduct;
+            assert(wanted_product);
+            break;
+        }
+    }
+    if(wanted_product == NULL){
+        return MATAMAZOM_PRODUCT_NOT_EXIST;
+    }
+    return wanted_product;
+}
+
+
+
 unsigned int mtmCreateNewOrder(Matamazom matamazom){
     if(!matamazom){
         return 0;
