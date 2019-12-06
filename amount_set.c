@@ -187,11 +187,11 @@ AmountSetResult asGetAmount(AmountSet set, ASElement element, double *outAmount)
     while (tmp){
         if(set->compareAsElements(tmp->element,element)==ELEMENTS_ARE_EQUAL){
             *outAmount=tmp->quantity;
-            return AS_SUCCESS;
+            break;
         }
         tmp=tmp->next_container;
     }
-
+    return AS_SUCCESS;
 }
 
 AmountSetResult asRegister(AmountSet set, ASElement element){
@@ -249,11 +249,12 @@ AmountSetResult asChangeAmount(AmountSet set, ASElement element, const double am
             } else{
                 //amount is good
                 tmp->quantity=tmp->quantity+amount;
-                return AS_SUCCESS;
+                break;
             }
         }
         tmp=tmp->next_container;
     }
+    return AS_SUCCESS;
 }
 
 AmountSetResult asDelete(AmountSet set, ASElement element){
