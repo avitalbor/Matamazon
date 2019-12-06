@@ -311,9 +311,14 @@ static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amo
     if(amountType==MATAMAZOM_ANY_AMOUNT){
         return true;
     }
-    int completeValue=(int)amount;
+    int completeValue;
+    if(amount>=0){
+        completeValue=(int)amount;
+    } else{
+        completeValue=(int)amount -1;
+    }
 
-    if((amount-completeValue)<=IN_RANGE_OF_MISTAKE|| ((completeValue+1))-amount<=IN_RANGE_OF_MISTAKE){
+    if(absOfNum((amount-completeValue))<=IN_RANGE_OF_MISTAKE|| absOfNum((completeValue+1)-amount)<=IN_RANGE_OF_MISTAKE){
         return true;
     }
     double complete_value_and_half=(double)completeValue+0.5;
@@ -378,13 +383,21 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
     newProduct->free_function=freeData;
     newProduct->get_price_function=prodPrice;
     newProduct->income=0;
-    newProduct->additional_info=customData;
+    newProduct->additional_info=copyData(customData);
+    if(!newProduct->additional_info){
+        freeProducts(newProduct);
+        return MATAMAZOM_OUT_OF_MEMORY;
+    }
     newProduct->amount_type=amountType;
     AmountSetResult registerNewProduct=asRegister(matamazom->list_of_products,newProduct);
     //assert(registerNewProduct==AS_SUCCESS);
     if (registerNewProduct==AS_ITEM_ALREADY_EXISTS){
         freeProducts(newProduct);
         return MATAMAZOM_PRODUCT_ALREADY_EXIST;
+    }
+   if(registerNewProduct==AS_OUT_OF_MEMORY){
+        freeProducts(newProduct);
+        return MATAMAZOM_OUT_OF_MEMORY;
     }
     assert(registerNewProduct==AS_SUCCESS);
     asChangeAmount(matamazom->list_of_products,newProduct,amount);
@@ -407,6 +420,10 @@ MatamazomResult mtmChangeProductAmount(Matamazom matamazom, const unsigned int i
     double  originalAmount;
     asGetAmount(matamazom->list_of_products,wantedProduct,&originalAmount);
     double newAmount=originalAmount + amount;
+    if(!checkIfAmountIsValid(wantedProduct->amount_type,amount)){
+        return MATAMAZOM_INVALID_AMOUNT;
+    }
+
     if(!checkIfAmountIsValid(wantedProduct->amount_type,newAmount)){
         return MATAMAZOM_INVALID_AMOUNT;
     }

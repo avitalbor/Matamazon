@@ -17,9 +17,10 @@ add_executable(ex1
         #amount_set_tests.h
         #amount_set_tests.c
         test_utilities.h
-        matamazom_main.c
-        matamazom_tests.h
-        matamazom_tests.c)
+        main-idan.c)
+        #matamazom_main.c
+        #matamazom_tests.h
+        #matamazom_tests.c)
         #unofficialtestAmountSet.c)
 
 target_link_libraries(ex1 ${CMAKE_SOURCE_DIR}/libmtm.a)
