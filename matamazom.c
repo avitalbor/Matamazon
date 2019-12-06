@@ -100,7 +100,7 @@ static int compareForAmountSet(ASElement element1, ASElement element2)
  * freeProducts- frees the data the product has (name and info) and than
  * frees the product
  */
-static void freeProducts(Product product){
+static void freeProduct(Product product){
     assert(product!=NULL);
     free(product->name);
     product->free_function(product->additional_info);
@@ -114,7 +114,7 @@ static void freeProducts(Product product){
 static void freeForAmountSet(ASElement element)
 {
     Product product=(Product) element;
-    freeProducts(product);
+    freeProduct(product);
 }
 
 
@@ -131,7 +131,7 @@ static Product copyProduct(Product product){
     }
     new_product->name=malloc(strlen(product->name)+1);
     if(!new_product->name){
-        freeProducts(new_product);
+        freeProduct(new_product);
         return NULL;
     }
     strcpy(new_product->name,product->name);
@@ -424,7 +424,7 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
 
     new_product->name=malloc(strlen(name)+1);
     if(!new_product->name){
-        freeProducts(new_product);
+        freeProduct(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
     strcpy(new_product->name,name);
@@ -434,23 +434,23 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
     new_product->income=0;
     new_product->additional_info=copyData(customData);
     if(!new_product->additional_info){
-        freeProducts(new_product);
+        freeProduct(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
     new_product->amount_type=amountType;
     AmountSetResult registerNewProduct=asRegister
                                       (matamazom->list_of_products,new_product);
     if (registerNewProduct==AS_ITEM_ALREADY_EXISTS){
-        freeProducts(new_product);
+        freeProduct(new_product);
         return MATAMAZOM_PRODUCT_ALREADY_EXIST;
     }
     if(registerNewProduct==AS_OUT_OF_MEMORY){
-        freeProducts(new_product);
+        freeProduct(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
     assert(registerNewProduct==AS_SUCCESS);
     asChangeAmount(matamazom->list_of_products,new_product,amount);
-    freeProducts(new_product);//because asRegister makes a newCopy
+    freeProduct(new_product);//because asRegister makes a newCopy
     return MATAMAZOM_SUCCESS;
 }
 
@@ -485,23 +485,10 @@ MatamazomResult mtmChangeProductAmount(Matamazom matamazom, const unsigned int i
 
 
 
-
 MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
     if(!matamazom){
         return MATAMAZOM_NULL_ARGUMENT;
     }
-    //Product tmpProduct=asGetFirst(matamazom->list_of_products);
-
-   // while (tmpProduct){
-     //   if(tmpProduct->id==id){
-       //     /*AmountSetResult delete= */asDelete(matamazom->list_of_products,tmpProduct);
-         //   //assert(delete==AS_SUCCESS);
-           // return MATAMAZOM_SUCCESS;
-        //}
-        //tmpProduct=asGetNext(matamazom->list_of_products);
-    //}
-//    return MATAMAZOM_PRODUCT_NOT_EXIST;
-
     Product wantedProduct =getProductFromId(matamazom->list_of_products,id);
     if(wantedProduct==NULL){
         return MATAMAZOM_PRODUCT_NOT_EXIST;
