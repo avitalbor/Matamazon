@@ -129,20 +129,20 @@ static Product copyProduct(Product product){
     if(!new_product){
         return NULL;
     }
-    newProduct->name=malloc(strlen(product->name)+1);
-    if(!newProduct->name){
-        freeProducts(newProduct);
+    new_product->name=malloc(strlen(product->name)+1);
+    if(!new_product->name){
+        freeProducts(new_product);
         return NULL;
     }
-    strcpy(newProduct->name,product->name);
-    newProduct->id=product->id;
-    newProduct->amount_type=product->amount_type;
-    newProduct->income=product->income;
-    newProduct->copy_function=product->copy_function;
-    newProduct->free_function=product->free_function;
-    newProduct->get_price_function=product->get_price_function;
-    newProduct->additional_info=product->copy_function(product->additional_info);
-    return newProduct;
+    strcpy(new_product->name,product->name);
+    new_product->id=product->id;
+    new_product->amount_type=product->amount_type;
+    new_product->income=product->income;
+    new_product->copy_function=product->copy_function;
+    new_product->free_function=product->free_function;
+    new_product->get_price_function=product->get_price_function;
+    new_product->additional_info=product->copy_function(product->additional_info);
+    return new_product;
 }
 
 
@@ -406,14 +406,14 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
         freeProducts(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
-    strcpy(newProduct->name,name);
-    newProduct->copy_function=copyData;
-    newProduct->free_function=freeData;
-    newProduct->get_price_function=prodPrice;
-    newProduct->income=0;
-    newProduct->additional_info=copyData(customData);
-    if(!newProduct->additional_info){
-        freeProducts(newProduct);
+    strcpy(new_product->name,name);
+    new_product->copy_function=copyData;
+    new_product->free_function=freeData;
+    new_product->get_price_function=prodPrice;
+    new_product->income=0;
+    new_product->additional_info=copyData(customData);
+    if(!new_product->additional_info){
+        freeProducts(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
     new_product->copy_function=copyData;
@@ -487,7 +487,10 @@ MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
     }
     return MATAMAZOM_PRODUCT_NOT_EXIST;
 }
-
+/**
+ * printNoBestSellingProduct: prints to the output file the line
+ * that needs to be printed in case there is no best selling product.
+ */
 
 static void printNoBestSellingProduct(FILE *output){
     fprintf(output,"Best Selling Product:\nnone\n");
@@ -533,6 +536,9 @@ MatamazomResult mtmPrintFiltered(Matamazom matamazom, MtmFilterProduct customFil
     }
     return MATAMAZOM_SUCCESS;
 }
+/**
+ * getTotalPriceOforder: receives an order and returns its total payment
+ */
 
 static double getTotalPriceOforder(Order order){
     double total_price_of_order=0;
@@ -547,10 +553,15 @@ static double getTotalPriceOforder(Order order){
     return total_price_of_order;
 }
 
+/**
+ * ALON WILL SAY WHAT IT DOES
+ * printProductsOfAmountSet: receives an amountset, and prints all of its
+ *
+ */
 
 
-
-static void printProductsOfAmountSet(AmountSet set, const bool per_unit, FILE *output){
+static void printProductsOfAmountSet(AmountSet set,
+                                            const bool per_unit, FILE *output){
     AS_FOREACH(Product,current_product,set) {
         double amount_of_current_product;
         double price_of_product;
