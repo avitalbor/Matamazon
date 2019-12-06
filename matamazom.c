@@ -262,6 +262,23 @@ static SetElement copyForSet(SetElement element){
 }
 
 
+/** NEEDS CLARIFYING */
+static Product getProductFromId(AmountSet set, unsigned int productId){
+    assert(set);
+    Product wanted_product = NULL;
+    AS_FOREACH(Product,currentProduct,set){
+        if(currentProduct->id == productId){
+            wanted_product = currentProduct;
+            assert(wanted_product);
+            break;
+        }
+    }
+    if(wanted_product == NULL){
+        return NULL;
+    }
+    return wanted_product;
+}
+
 
 
 Matamazom matamazomCreate(){
@@ -476,16 +493,27 @@ MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
     if(!matamazom){
         return MATAMAZOM_NULL_ARGUMENT;
     }
-    Product tmpProduct=asGetFirst(matamazom->list_of_products);
-    while (tmpProduct){
-        if(tmpProduct->id==id){
-            /*AmountSetResult delete= */asDelete(matamazom->list_of_products,tmpProduct);
-            //assert(delete==AS_SUCCESS);
-            return MATAMAZOM_SUCCESS;
-        }
-        tmpProduct=asGetNext(matamazom->list_of_products);
+    //Product tmpProduct=asGetFirst(matamazom->list_of_products);
+
+   // while (tmpProduct){
+     //   if(tmpProduct->id==id){
+       //     /*AmountSetResult delete= */asDelete(matamazom->list_of_products,tmpProduct);
+         //   //assert(delete==AS_SUCCESS);
+           // return MATAMAZOM_SUCCESS;
+        //}
+        //tmpProduct=asGetNext(matamazom->list_of_products);
+    //}
+//    return MATAMAZOM_PRODUCT_NOT_EXIST;
+
+    Product wantedProduct =getProductFromId(matamazom->list_of_products,id);
+    if(wantedProduct==NULL){
+        return MATAMAZOM_PRODUCT_NOT_EXIST;
     }
-    return MATAMAZOM_PRODUCT_NOT_EXIST;
+    SET_FOREACH(Order,current_order,matamazom->set_of_orders){
+        asDelete(current_order->products_of_order,(ASElement) wantedProduct);
+    }
+    asDelete(matamazom->list_of_products,wantedProduct);
+    return MATAMAZOM_SUCCESS;
 }
 /**
  * printNoBestSellingProduct: prints to the output file the line
@@ -624,24 +652,6 @@ static Order getOrderFromId(Set set, unsigned int orderId){
     }
     return wanted_order;
 }
-
-/** NEEDS CLARIFYING */
-static Product getProductFromId(AmountSet set, unsigned int productId){
-    assert(set);
-    Product wanted_product = NULL;
-    AS_FOREACH(Product,currentProduct,set){
-        if(currentProduct->id == productId){
-            wanted_product = currentProduct;
-            assert(wanted_product);
-            break;
-        }
-    }
-    if(wanted_product == NULL){
-        return NULL;
-    }
-    return wanted_product;
-}
-
 
 
 unsigned int mtmCreateNewOrder(Matamazom matamazom){
