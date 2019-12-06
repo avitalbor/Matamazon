@@ -437,7 +437,7 @@ MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
 
 
 static void printNoBestSellingProduct(FILE *output){
-    fprintf(output,"Best Selling Product: \nnone ");
+    fprintf(output,"Best Selling Product:\nnone\n");
 }
 
 MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
@@ -461,6 +461,7 @@ MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
         printNoBestSellingProduct(output);
         return MATAMAZOM_SUCCESS;
     }
+    fprintf(output,"Best Selling Product:\n");
     mtmPrintIncomeLine(bestSellingProduct->name,bestSellingProduct->id,max_income,output);
     return MATAMAZOM_SUCCESS;
 }
