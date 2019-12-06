@@ -17,7 +17,8 @@ add_executable(ex1
         #amount_set_tests.h
         #amount_set_tests.c
         test_utilities.h
-        main-idan.c)
+        #main-idan.c
+        main.c)
         #matamazom_main.c
         #matamazom_tests.h
         #matamazom_tests.c)
