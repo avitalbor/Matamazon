@@ -671,16 +671,14 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
     // put the order in the specific matamazom
     SetResult register_new_order = setAdd(matamazom->set_of_orders, (SetElement)new_order);
    // SetResult register_new_order = setAdd(matamazom->set_of_orders, new_order;
-
-
-
     if(register_new_order != SET_SUCCESS){
-        free(new_order);
+        freeOrder(new_order);
         return 0;
     }
+    unsigned int id_of_order = new_order->id_of_order;
+    freeOrder(new_order);
 
-
-    return new_order->id_of_order;
+    return id_of_order;
 }
 
 
