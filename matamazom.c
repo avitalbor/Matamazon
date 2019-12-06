@@ -20,6 +20,21 @@ typedef struct Matamazom_t {
     unsigned  int current_order_id;
 };
 
+/**
+ * struct to be used by the warehouse,
+ *it functions as the element for amount set
+ *  @param name - The name of the product
+ *  @param id - the unique id of the product
+ *  @param income- the total income the warehouse made by selling this product
+ *  @param free_function -pointer for a function to be used to
+ *  free additional info
+ *  @param copy_function -pointer for a function to be used to
+ *  copy additional info
+ *  @param get_price_function -pointer for a function to be used to
+ *  get the price of the prodcut
+ *  @param additional info -pointer to product's additional info
+ *  @param amount_type- the amount_type of the product
+ */
 typedef struct product{
     char* name;
     unsigned int id;
@@ -31,6 +46,14 @@ typedef struct product{
     MtmGetProductPrice  get_price_function;
 }*Product;
 
+
+/**
+ * struct to describe an order,
+ *@param products_of_order- an AmountSet of products to keep the
+ * products of the order
+ * @param id_of_order- unique id to represent the order
+ */
+
 typedef struct order{
     AmountSet products_of_order;
     unsigned int id_of_order;
@@ -38,10 +61,12 @@ typedef struct order{
 
 
 /**
- * compare function of products
- * this function should return:
- * 1 if the id of the first product is bigger, 0 if the id of two Products is  equal
- * and -1 if the id of the second product is bigger
+ * compareProducts: compare function of products
+ *
+ *  @return:
+ *       0 :  if the id of the 2 products it equal
+ *      -1 :  if the id of the first product is bigger
+ *       1 :  if the id of the second product is bigger
  */
 static int compareProducts(Product product1, Product product2){
     assert(product1 &&product2);
@@ -55,10 +80,13 @@ static int compareProducts(Product product1, Product product2){
 }
 
 /**
- * compare function of ASElement that will be sent to amount_Set
- * this function does casting of ASElement to Product and calls the compareProducts function
- * this function should return:
- * 1 if the first element is bigger, 0 if the two elements are equal and -1 if the second element is bigger
+ * compareForAmountSet: pointer of function to be sent for amoun set
+ *                       does casting of element to product and calls the
+ *                       compare products function
+ * @return:
+ *       0 :  if the 2 elemnts equal
+ *      -1 :  if the  first element is bigger
+ *       1 :  if the second elemnt is bigger
  */
 static int compareForAmountSet(ASElement element1, ASElement element2)
 {
@@ -69,7 +97,8 @@ static int compareForAmountSet(ASElement element1, ASElement element2)
 
 
 /**
- * free function of products
+ * freeProducts- frees the data the product has (name and info) and than
+ * frees the product
  */
 static void freeProducts(Product product){
     assert(product!=NULL);
@@ -96,20 +125,20 @@ static void freeForAmountSet(ASElement element)
  * The duplicated Product if the function was successful
  */
 static Product copyProduct(Product product){
-    Product newProduct=malloc(sizeof(*newProduct));
-    if(!newProduct){
+    Product new_product=malloc(sizeof(*new_product));
+    if(!new_product){
         return NULL;
     }
-    //strcpy(newProdcut->name,product->name);
-    newProduct->name=strdup(product->name);
-    newProduct->id=product->id;
-    newProduct->amount_type=product->amount_type;
-    newProduct->income=product->income;
-    newProduct->copy_function=product->copy_function;
-    newProduct->free_function=product->free_function;
-    newProduct->get_price_function=product->get_price_function;
-    newProduct->additional_info=product->copy_function(product->additional_info);
-    return newProduct;
+    new_product->name=strdup(product->name);
+    new_product->id=product->id;
+    new_product->amount_type=product->amount_type;
+    new_product->income=product->income;
+    new_product->copy_function=product->copy_function;
+    new_product->free_function=product->free_function;
+    new_product->get_price_function=product->get_price_function;
+    new_product->additional_info=
+                product->copy_function(product->additional_info);
+    return new_product;
 }
 
 
@@ -148,9 +177,11 @@ static int compareOrders(Order order1, Order order2){
 
 /**
  * compare function of SetElement that will be sent to set
- * this function does casting of SetElement to Order and calls the compareOrders function
+ * this function does casting of SetElement to Order and calls
+ * the compareOrders function
  * this function should return:
- * 1 if the first element is bigger, 0 if the two elements are equal and -1 if the second element is bigger
+ * 1 if the first element is bigger,
+ * 0 if the two elements are equal and -1 if the second element is bigger
  */
 static int compareForSet(SetElement element1, SetElement element2){
     Order order1=(Order)element1;
@@ -234,7 +265,9 @@ Matamazom matamazomCreate(){
     if(!warehouse){
         return NULL;
     }
-    warehouse->list_of_products=asCreate(copyForAmountSet,freeForAmountSet,compareForAmountSet);
+    //now need to create list_of_products and the set_of_orders
+    warehouse->list_of_products=
+            asCreate(copyForAmountSet,freeForAmountSet,compareForAmountSet);
     if(!warehouse->list_of_products){
         free(warehouse);
         return NULL;
@@ -261,7 +294,7 @@ void matamazomDestroy(Matamazom matamazom){
 }
 
 /**
- * check if name is valid function
+ * check if name is valid : receives a name and returns if its valid
  * @return:
  * false- if name is empty, or doesn't start with a
  *         letter (a -z, A -Z) or a digit (0 -9).
@@ -287,7 +320,7 @@ static bool checkIfNameIsValid(const char* name){
 
 
 /**
- * receives a number ant returns it absolute value
+ * receives a number and returns it absolute value
  */
 static double absOfNum(double num){
     if(num<0){
@@ -305,9 +338,7 @@ static double absOfNum(double num){
  */
 
 static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amount){
-    /*if(amount<0){
-        return false;
-    }*/
+
     if(amountType==MATAMAZOM_ANY_AMOUNT){
         return true;
     }
@@ -318,7 +349,8 @@ static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amo
         completeValue=(int)amount -1;
     }
 
-    if(absOfNum((amount-completeValue))<=IN_RANGE_OF_MISTAKE|| absOfNum((completeValue+1)-amount)<=IN_RANGE_OF_MISTAKE){
+    if(absOfNum((amount-completeValue))<=IN_RANGE_OF_MISTAKE||
+            absOfNum((completeValue+1)-amount)<=IN_RANGE_OF_MISTAKE){
         return true;
     }
     double complete_value_and_half=(double)completeValue+0.5;
@@ -330,11 +362,11 @@ static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amo
     return false;
 }
 
-/**
- * check if the product exists in the warehouse
+/**checkIfIdOfProductExists: receives a matamazom and id, and returns if
+ * there exicts a product with the same id in the matamazom
  * @return:
- * false- if the product doesn't belong to the warehouse
- * true -if it does
+ * false- if there isn't a product with the given id in the warehouse
+ * true -if there is such a product
  */
 
 static bool checkIfIdOfProductExists(Matamazom matamazom,const unsigned int id){
@@ -346,18 +378,10 @@ static bool checkIfIdOfProductExists(Matamazom matamazom,const unsigned int id){
     return false;
 }
 
-
-
-
-
-
-
 MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const char *name,
                               const double amount, const MatamazomAmountType amountType,
                               const MtmProductData customData, MtmCopyData copyData,
                               MtmFreeData freeData, MtmGetProductPrice prodPrice){
-
-
     if(!matamazom || !name ||!customData ||!copyData ||!freeData ||!prodPrice){
         return MATAMAZOM_NULL_ARGUMENT;
     }
@@ -367,40 +391,44 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
     if(!checkIfAmountIsValid(amountType,amount)||amount<0){
         return MATAMAZOM_INVALID_AMOUNT;
     }
-    Product newProduct=malloc(sizeof(*newProduct));
-    if(!newProduct){
+    Product new_product=malloc(sizeof(*new_product));
+    if(!new_product){
         return MATAMAZOM_OUT_OF_MEMORY;
     }
-    newProduct->id=id;
+    new_product->id=id;
 
-    newProduct->name=malloc(strlen(name)+1);
-    if(!newProduct->name){
-        freeProducts(newProduct);
+    new_product->name=malloc(strlen(name)+1);
+    if(!new_product->name){
+        freeProducts(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
-    newProduct->name=strdup(name);
-    newProduct->copy_function=copyData;
-    newProduct->free_function=freeData;
-    newProduct->get_price_function=prodPrice;
-    newProduct->income=0;
-    newProduct->additional_info=copyData(customData);
-    if(!newProduct->additional_info){
-        freeProducts(newProduct);
+    new_product->name=strdup(name);
+    if(!new_product->name){
+        freeProducts(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
-    newProduct->amount_type=amountType;
-    AmountSetResult registerNewProduct=asRegister(matamazom->list_of_products,newProduct);
-    //assert(registerNewProduct==AS_SUCCESS);
+    new_product->copy_function=copyData;
+    new_product->free_function=freeData;
+    new_product->get_price_function=prodPrice;
+    new_product->income=0;
+    new_product->additional_info=copyData(customData);
+    if(!new_product->additional_info){
+        freeProducts(new_product);
+        return MATAMAZOM_OUT_OF_MEMORY;
+    }
+    new_product->amount_type=amountType;
+    AmountSetResult registerNewProduct=asRegister
+                                      (matamazom->list_of_products,new_product);
     if (registerNewProduct==AS_ITEM_ALREADY_EXISTS){
-        freeProducts(newProduct);
+        freeProducts(new_product);
         return MATAMAZOM_PRODUCT_ALREADY_EXIST;
     }
-   if(registerNewProduct==AS_OUT_OF_MEMORY){
-        freeProducts(newProduct);
+    if(registerNewProduct==AS_OUT_OF_MEMORY){
+        freeProducts(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
     assert(registerNewProduct==AS_SUCCESS);
-    asChangeAmount(matamazom->list_of_products,newProduct,amount);
+    asChangeAmount(matamazom->list_of_products,new_product,amount);
     return MATAMAZOM_SUCCESS;
 }
 
@@ -417,13 +445,12 @@ MatamazomResult mtmChangeProductAmount(Matamazom matamazom, const unsigned int i
         wantedProduct=asGetNext(matamazom->list_of_products);
         assert(wantedProduct);
     }
-    double  originalAmount;
-    asGetAmount(matamazom->list_of_products,wantedProduct,&originalAmount);
-    double newAmount=originalAmount + amount;
     if(!checkIfAmountIsValid(wantedProduct->amount_type,amount)){
         return MATAMAZOM_INVALID_AMOUNT;
     }
-
+    double  originalAmount;
+    asGetAmount(matamazom->list_of_products,wantedProduct,&originalAmount);
+    double newAmount=originalAmount + amount;
     if(!checkIfAmountIsValid(wantedProduct->amount_type,newAmount)){
         return MATAMAZOM_INVALID_AMOUNT;
     }
@@ -467,8 +494,7 @@ MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
         return MATAMAZOM_SUCCESS;
     }
     double max_income=bestSellingProduct->income;
-    AS_FOREACH(Product,currentProduct,matamazom->list_of_products)
-    {
+    AS_FOREACH(Product,currentProduct,matamazom->list_of_products){
         if((currentProduct->income)-(bestSellingProduct->income)>IN_RANGE_OF_MISTAKE){
             bestSellingProduct=currentProduct;
             max_income=bestSellingProduct->income;
@@ -544,15 +570,14 @@ MatamazomResult mtmPrintInventory(Matamazom matamazom, FILE *output){
 }
 
 MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, FILE *output) {
-
     if (!matamazom || !output) {
         return MATAMAZOM_NULL_ARGUMENT;
     }
-
     SET_FOREACH(Order, current_order, matamazom->set_of_orders) {
         if (current_order->id_of_order == orderId) {
             mtmPrintOrderHeading(orderId, output);
-            printProductsOfAmountSet(current_order->products_of_order, false, output);
+            printProductsOfAmountSet(current_order->products_of_order,
+                                                        false,output);
             double total_price_of_order = getTotalPriceOforder(current_order);
             mtmPrintOrderSummary(total_price_of_order, output);
             return AS_SUCCESS;
@@ -564,28 +589,6 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Alon's Functions
-
-
-
-/** NEEDS CLARIFYING */
 static Order getOrderFromId(Set set, unsigned int orderId){
     assert(set);
     Order wanted_order = NULL;
@@ -649,9 +652,6 @@ unsigned int mtmCreateNewOrder(Matamazom matamazom){
         return 0;
     }
 
-
-    //matamazom->current_order_id=matamazom->current_order_id+1;
-    //new_order->id_of_order=matamazom->current_order_id;
 
     return new_order->id_of_order;
 }
@@ -776,14 +776,7 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
     }
     //get the order
     Order wanted_order=getOrderFromId(matamazom->set_of_orders,orderId);
-    /*Order wanted_order = NULL;
-    SET_FOREACH(Order,currentOrder,matamazom->set_of_orders){
-        if(currentOrder->id_of_order == orderId){
-            wanted_order = (Order)currentOrder;
-            assert(wanted_order);
-            break;
-        }
-    }*/
+
     if(wanted_order == NULL){
         return MATAMAZOM_ORDER_NOT_EXIST;
     }
@@ -800,13 +793,6 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
 
 
 
-/*
-avital's loop to get ID's to change
-Product wantedProduct=asGetFirst(matamazom->list_of_products);
-while (wantedProduct->id!=id){
-wantedProduct=asGetNext(matamazom->list_of_products);
-assert(wantedProduct);
-}
-*/
+
 
 
