@@ -472,11 +472,11 @@ MatamazomResult mtmPrintFiltered(Matamazom matamazom, MtmFilterProduct customFil
     }
     double amount_Of_Product=0;
     AS_FOREACH(Product,currentProduct,matamazom->list_of_products){
-        asGetAmount(matamazom->list_of_products,currentProduct,&amount_Of_Product);
+        AmountSetResult result = asGetAmount(matamazom->list_of_products,currentProduct,&amount_Of_Product);
         if(customFilter(currentProduct->id,currentProduct->name,
                         amount_Of_Product,currentProduct->additional_info)){
             mtmPrintProductDetails(currentProduct->name,currentProduct->id,
-                    amount_Of_Product,currentProduct->get_price_function(currentProduct,1),output);
+                    amount_Of_Product,currentProduct->get_price_function(currentProduct->additional_info,1),output);
         }
     }
     return MATAMAZOM_SUCCESS;
@@ -489,8 +489,8 @@ static double getTotalPriceOforder(Order order){
     AS_FOREACH(Product,current_product,order->products_of_order){
         AmountSetResult result =asGetAmount(order->products_of_order,current_product,&amount_of_product_in_order);
         assert(result == AS_SUCCESS);
-        price_of_product=current_product->get_price_function(current_product->additional_info,1);
-        total_price_of_order=total_price_of_order+price_of_product*amount_of_product_in_order;
+        price_of_product=current_product->get_price_function(current_product->additional_info,amount_of_product_in_order);
+        total_price_of_order=total_price_of_order+price_of_product;
     }
     return total_price_of_order;
 }
@@ -498,13 +498,20 @@ static double getTotalPriceOforder(Order order){
 
 
 
-static void printProductsOfAmountSet(AmountSet set, FILE *output){
+static void printProductsOfAmountSet(AmountSet set, const bool per_unit, FILE *output){
     AS_FOREACH(Product,current_product,set) {
         double amount_of_current_product;
+        double price_of_product;
         AmountSetResult result = asGetAmount(set, current_product, &amount_of_current_product);
         assert(result == AS_SUCCESS);
-        double price_of_product = current_product->get_price_function(current_product->additional_info, 1);
-
+        if(per_unit == true) {
+            price_of_product = current_product->get_price_function(
+                    current_product->additional_info, 1);
+        }
+        else{
+            price_of_product = current_product->get_price_function(
+                    current_product->additional_info, amount_of_current_product);
+        }
         mtmPrintProductDetails(current_product->name, current_product->id, amount_of_current_product, price_of_product,
                                output);//check if output her is correct
     }
@@ -515,7 +522,7 @@ MatamazomResult mtmPrintInventory(Matamazom matamazom, FILE *output){
         return MATAMAZOM_NULL_ARGUMENT;
     }
     fprintf(output,"Inventory Status:\n");
-    printProductsOfAmountSet(matamazom->list_of_products,output);
+    printProductsOfAmountSet(matamazom->list_of_products, true, output);
     return MATAMAZOM_SUCCESS;
 }
 
@@ -528,9 +535,8 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
     SET_FOREACH(Order, current_order, matamazom->set_of_orders) {
         if (current_order->id_of_order == orderId) {
             mtmPrintOrderHeading(orderId, output);
-            printProductsOfAmountSet(current_order->products_of_order, output);
+            printProductsOfAmountSet(current_order->products_of_order, false, output);
             double total_price_of_order = getTotalPriceOforder(current_order);
-            //printf("**********\n");
             mtmPrintOrderSummary(total_price_of_order, output);
             return AS_SUCCESS;
         }
