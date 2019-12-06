@@ -103,7 +103,7 @@ static int compareForAmountSet(ASElement element1, ASElement element2)
 static void freeProducts(Product product){
     assert(product!=NULL);
     free(product->name);
-    product->free_function (product->additional_info);
+    product->free_function(product->additional_info);
     free(product);
 }
 
@@ -485,6 +485,7 @@ MatamazomResult mtmChangeProductAmount(Matamazom matamazom, const unsigned int i
 
 
 
+
 MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
     if(!matamazom){
         return MATAMAZOM_NULL_ARGUMENT;
@@ -813,12 +814,4 @@ MatamazomResult mtmCancelOrder(Matamazom matamazom, const unsigned int orderId){
     //assert(remove_result != SET_NULL_ARGUMENT);
     return MATAMAZOM_SUCCESS;
 }
-
-
-
-
-
-
-
-
 

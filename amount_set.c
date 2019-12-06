@@ -266,7 +266,7 @@ AmountSetResult asDelete(AmountSet set, ASElement element){
         return AS_ITEM_DOES_NOT_EXIST;
     }
     Set_Container tmp1= set->amount_set_container;
-    Set_Container tmp2= set->amount_set_container;
+    Set_Container tmp2=NULL;
 
     while (set->compareAsElements(tmp1->next_container->element,element)
            !=ELEMENTS_ARE_EQUAL){
