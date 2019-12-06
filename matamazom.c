@@ -469,7 +469,7 @@ MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
     double max_income=bestSellingProduct->income;
     AS_FOREACH(Product,currentProduct,matamazom->list_of_products)
     {
-        if((currentProduct->income)>(bestSellingProduct->income)){
+        if((currentProduct->income)-(bestSellingProduct->income)>IN_RANGE_OF_MISTAKE){
             bestSellingProduct=currentProduct;
             max_income=bestSellingProduct->income;
         }
