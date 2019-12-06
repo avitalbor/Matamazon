@@ -309,8 +309,12 @@ void matamazomDestroy(Matamazom matamazom){
     if(!matamazom){
         return;
     }
-    asDestroy(matamazom->list_of_products);
+    /*SET_FOREACH(Order ,currentOrder,matamazom->set_of_orders){
+        freeOrder(currentOrder);
+    }*/
+
     setDestroy(matamazom->set_of_orders);
+    asDestroy(matamazom->list_of_products);
     free(matamazom);
 }
 
@@ -433,15 +437,6 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
         freeProducts(new_product);
         return MATAMAZOM_OUT_OF_MEMORY;
     }
-    new_product->copy_function=copyData;
-    new_product->free_function=freeData;
-    new_product->get_price_function=prodPrice;
-    new_product->income=0;
-    new_product->additional_info=copyData(customData);
-    if(!new_product->additional_info){
-        freeProducts(new_product);
-        return MATAMAZOM_OUT_OF_MEMORY;
-    }
     new_product->amount_type=amountType;
     AmountSetResult registerNewProduct=asRegister
                                       (matamazom->list_of_products,new_product);
@@ -455,6 +450,7 @@ MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const 
     }
     assert(registerNewProduct==AS_SUCCESS);
     asChangeAmount(matamazom->list_of_products,new_product,amount);
+    freeProducts(new_product);//because asRegister makes a newCopy
     return MATAMAZOM_SUCCESS;
 }
 
@@ -512,7 +508,7 @@ MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
     SET_FOREACH(Order,current_order,matamazom->set_of_orders){
         asDelete(current_order->products_of_order,(ASElement) wantedProduct);
     }
-    asDelete(matamazom->list_of_products,wantedProduct);
+    asDelete(matamazom->list_of_products,(ASElement)wantedProduct);
     return MATAMAZOM_SUCCESS;
 }
 /**
