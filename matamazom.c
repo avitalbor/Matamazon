@@ -262,8 +262,15 @@ static SetElement copyForSet(SetElement element){
 }
 
 
-/** NEEDS CLARIFYING */
-static Product getProductFromId(AmountSet set, unsigned int productId){
+/**
+ * getProductFromId : receives an AmountSet and an id, and returns a pointer
+ * to the product with the same id in the received amountSet
+ * @return:
+ * Null- if there isn't a product with the given id in the received amountSet
+ * Product- a pointer to the wanted product(the product with the same id
+ * as the received id)
+ */
+ static Product getProductFromId(AmountSet set, unsigned int productId){
     assert(set);
     Product wanted_product = NULL;
     AS_FOREACH(Product,currentProduct,set){
@@ -277,6 +284,191 @@ static Product getProductFromId(AmountSet set, unsigned int productId){
         return NULL;
     }
     return wanted_product;
+}
+
+
+/**
+ * checkIfNameIsValid : receives a name and returns if its valid
+ * @return:
+ * false- if name is empty, or doesn't start with a
+ *         letter (a -z, A -Z) or a digit (0 -9).
+ * true -otherwise
+ */
+
+static bool checkIfNameIsValid(const char* name){
+    assert(name);
+    if(strlen(name)==0){
+        return false;
+    }
+    if(name[0]>='a'&&name[0]<='z'){
+        return true;
+    }
+    if(name[0]>='A'&&name[0]<='Z'){
+        return true;
+    }
+    if((name[0]-'0')>=0 &&(name[0]-'0')<=9){
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * absOfNUm
+ * * @return:
+ * the absolute value of the number the function receives
+ */
+static double absOfNum(double num){
+    if(num<0){
+        return -num;
+    }
+    return num;
+}
+
+
+
+/**
+ * checkIfAmountIsValid: check if the amount  consistent with the amountType
+ * @return:
+ * false- if  amount isn't consistent with the amountType
+ * true -otherwise
+ */
+
+static bool checkIfAmountIsValid(MatamazomAmountType amountType,
+                                                        const double amount){
+
+    if(amountType==MATAMAZOM_ANY_AMOUNT){
+        return true;
+    }
+    int completeValue;
+    if(amount>=0){
+        completeValue=(int)amount;
+    } else{
+        completeValue=(int)amount -1;
+    }
+
+    if(absOfNum((amount-completeValue))<=IN_RANGE_OF_MISTAKE||
+       absOfNum((completeValue+1)-amount)<=IN_RANGE_OF_MISTAKE){
+        return true;
+    }
+    double complete_value_and_half=(double)completeValue+0.5;
+    if(amountType==MATAMAZOM_HALF_INTEGER_AMOUNT){
+        if(absOfNum((complete_value_and_half-amount))<=IN_RANGE_OF_MISTAKE){
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * printNoBestSellingProduct: prints to the output file the line
+ * that needs to be printed in case there is no best selling product.
+ */
+
+static void printNoBestSellingProduct(FILE *output){
+    fprintf(output,"Best Selling Product:\nnone\n");
+}
+
+
+/**
+ * getTotalPriceOforder: receives an order and returns its total payment
+ */
+
+static double getTotalPriceOforder(Order order){
+    double total_price_of_order=0;
+    double price_of_product=0;
+    double amount_of_product_in_order;
+    AS_FOREACH(Product,current_product,order->products_of_order){
+        /*AmountSetResult result =*/asGetAmount(order->products_of_order,current_product,&amount_of_product_in_order);
+        //assert(result == AS_SUCCESS);
+        price_of_product=current_product->get_price_function
+                (current_product->additional_info,amount_of_product_in_order);
+        total_price_of_order=total_price_of_order+price_of_product;
+    }
+    return total_price_of_order;
+}
+
+
+/**
+ * ALON WILL SAY WHAT IT DOES
+ * printProductsOfAmountSet: receives an amountset, and prints all of its
+ *
+ */
+
+
+static void printProductsOfAmountSet(AmountSet set,
+                                     const bool per_unit, FILE *output){
+    AS_FOREACH(Product,current_product,set) {
+        double amount_of_current_product;
+        double price_of_product;
+        /*AmountSetResult result = */asGetAmount(set, current_product, &amount_of_current_product);
+        //assert(result == AS_SUCCESS);
+        if(per_unit == true) {
+            price_of_product = current_product->get_price_function(
+                    current_product->additional_info, 1);
+        }
+        else{
+            price_of_product = current_product->get_price_function(
+                    current_product->additional_info, amount_of_current_product);
+        }
+        mtmPrintProductDetails(current_product->name, current_product->id, amount_of_current_product, price_of_product,
+                               output);//check if output her is correct
+    }
+}
+
+
+/**
+ * getOrderFromId : receives a Set of Orders and an id, and returns a pointer
+ * to the order with the same id  in the received Set
+ * @return:
+ * Null- if there isn't an order with the given id in the received Set
+ * Order- a pointer to the wanted Order(the order with the same id as
+ * the received id)
+ */
+
+static Order getOrderFromId(Set set, unsigned int orderId){
+    assert(set);
+    Order wanted_order = NULL;
+
+    SET_FOREACH(Order,currentOrder,set){
+        if(currentOrder->id_of_order == orderId){
+            wanted_order = currentOrder;
+            return wanted_order;
+        }
+    }
+    if(wanted_order == NULL){
+        return NULL;
+    }
+    return wanted_order;
+}
+
+
+/**
+ * checkIfOrderIsValid: checks if the amount of all the products
+ * in the order is valid
+ * @return:
+ * false-  if there is a product in the order, with bigger amount in the order
+ * than the amount in the warehouse
+ * true -if the amount of all the products is valid
+ */
+
+
+static bool checkIfOrderIsValid(Matamazom matamazom, Order order) {
+    assert(matamazom && order);
+    double amount_in_matamazom;
+    double amount_in_order;
+    //AmountSetResult get_amount;
+    AS_FOREACH(Product, orderProduct, order->products_of_order) {
+        /*get_amount=*/asGetAmount(matamazom->list_of_products,orderProduct,&amount_in_matamazom);
+
+        //assert(get_amount==AS_SUCCESS);
+        /*get_amount=*/asGetAmount(order->products_of_order,orderProduct,&amount_in_order);
+        //assert(get_amount==AS_SUCCESS);
+        if(amount_in_order>amount_in_matamazom){
+            return false;
+        }
+    }
+    return true;
 }
 
 
@@ -305,102 +497,14 @@ Matamazom matamazomCreate(){
 
 
 
+
 void matamazomDestroy(Matamazom matamazom){
     if(!matamazom){
         return;
     }
-    /*SET_FOREACH(Order ,currentOrder,matamazom->set_of_orders){
-        freeOrder(currentOrder);
-    }*/
-
     setDestroy(matamazom->set_of_orders);
     asDestroy(matamazom->list_of_products);
     free(matamazom);
-}
-
-/**
- * check if name is valid : receives a name and returns if its valid
- * @return:
- * false- if name is empty, or doesn't start with a
- *         letter (a -z, A -Z) or a digit (0 -9).
- * true -otherwise
- */
-
-static bool checkIfNameIsValid(const char* name){
-    assert(name);
-    if(strlen(name)==0){
-        return false;
-    }
-    if(name[0]>='a'&&name[0]<='z'){
-        return true;
-    }
-    if(name[0]>='A'&&name[0]<='Z'){
-        return true;
-    }
-    if((name[0]-'0')>=0 &&(name[0]-'0')<=9){
-        return true;
-    }
-    return false;
-}
-
-
-/**
- * receives a number and returns it absolute value
- */
-static double absOfNum(double num){
-    if(num<0){
-        return -num;
-    }
-    return num;
-}
-
-
-/**
- * check if the amount is valid and consistent with the amountType
- * @return:
- * false- if amount is negative or amount isn't consistent with the amountType
- * true -otherwise
- */
-
-static bool checkIfAmountIsValid(MatamazomAmountType amountType,const double amount){
-
-    if(amountType==MATAMAZOM_ANY_AMOUNT){
-        return true;
-    }
-    int completeValue;
-    if(amount>=0){
-        completeValue=(int)amount;
-    } else{
-        completeValue=(int)amount -1;
-    }
-
-    if(absOfNum((amount-completeValue))<=IN_RANGE_OF_MISTAKE||
-            absOfNum((completeValue+1)-amount)<=IN_RANGE_OF_MISTAKE){
-        return true;
-    }
-    double complete_value_and_half=(double)completeValue+0.5;
-    if(amountType==MATAMAZOM_HALF_INTEGER_AMOUNT){
-        if(absOfNum((complete_value_and_half-amount))<=IN_RANGE_OF_MISTAKE){
-            return true;
-        }
-    }
-    return false;
-}
-
-/**checkIfIdOfProductExists: receives a matamazom and id, and returns if
- * there exicts a product with the same id in the matamazom
- * @return:
- * false- if there isn't a product with the given id in the warehouse
- * true -if there is such a product
- */
-
-static bool checkIfIdOfProductExists(Matamazom matamazom,const unsigned int id){
-    AS_FOREACH(Product,i,matamazom->list_of_products){
-        if(i->id==id){
-            return true;
-        }
-    }
-    return false;
 }
 
 MatamazomResult mtmNewProduct(Matamazom matamazom, const unsigned int id, const char *name,
@@ -459,14 +563,13 @@ MatamazomResult mtmChangeProductAmount(Matamazom matamazom, const unsigned int i
     if(!matamazom){
         return MATAMAZOM_NULL_ARGUMENT;
     }
-    if(!checkIfIdOfProductExists(matamazom,id)){
+
+
+    Product wantedProduct=getProductFromId(matamazom->list_of_products,id);
+    if(wantedProduct==NULL){
         return MATAMAZOM_PRODUCT_NOT_EXIST;
     }
-    Product wantedProduct=asGetFirst(matamazom->list_of_products);
-    while (wantedProduct->id!=id){
-        wantedProduct=asGetNext(matamazom->list_of_products);
-        assert(wantedProduct);
-    }
+    
     if(!checkIfAmountIsValid(wantedProduct->amount_type,amount)){
         return MATAMAZOM_INVALID_AMOUNT;
     }
@@ -499,14 +602,7 @@ MatamazomResult mtmClearProduct(Matamazom matamazom, const unsigned int id){
     asDelete(matamazom->list_of_products,(ASElement)wantedProduct);
     return MATAMAZOM_SUCCESS;
 }
-/**
- * printNoBestSellingProduct: prints to the output file the line
- * that needs to be printed in case there is no best selling product.
- */
 
-static void printNoBestSellingProduct(FILE *output){
-    fprintf(output,"Best Selling Product:\nnone\n");
-}
 
 MatamazomResult mtmPrintBestSelling(Matamazom matamazom, FILE *output){
     if(!matamazom|| !output){
@@ -548,49 +644,7 @@ MatamazomResult mtmPrintFiltered(Matamazom matamazom, MtmFilterProduct customFil
     }
     return MATAMAZOM_SUCCESS;
 }
-/**
- * getTotalPriceOforder: receives an order and returns its total payment
- */
 
-static double getTotalPriceOforder(Order order){
-    double total_price_of_order=0;
-    double price_of_product=0;
-    double amount_of_product_in_order;
-    AS_FOREACH(Product,current_product,order->products_of_order){
-        /*AmountSetResult result =*/asGetAmount(order->products_of_order,current_product,&amount_of_product_in_order);
-        //assert(result == AS_SUCCESS);
-        price_of_product=current_product->get_price_function(current_product->additional_info,amount_of_product_in_order);
-        total_price_of_order=total_price_of_order+price_of_product;
-    }
-    return total_price_of_order;
-}
-
-/**
- * ALON WILL SAY WHAT IT DOES
- * printProductsOfAmountSet: receives an amountset, and prints all of its
- *
- */
-
-
-static void printProductsOfAmountSet(AmountSet set,
-                                            const bool per_unit, FILE *output){
-    AS_FOREACH(Product,current_product,set) {
-        double amount_of_current_product;
-        double price_of_product;
-        /*AmountSetResult result = */asGetAmount(set, current_product, &amount_of_current_product);
-        //assert(result == AS_SUCCESS);
-        if(per_unit == true) {
-            price_of_product = current_product->get_price_function(
-                    current_product->additional_info, 1);
-        }
-        else{
-            price_of_product = current_product->get_price_function(
-                    current_product->additional_info, amount_of_current_product);
-        }
-        mtmPrintProductDetails(current_product->name, current_product->id, amount_of_current_product, price_of_product,
-                               output);//check if output her is correct
-    }
-}
 
 MatamazomResult mtmPrintInventory(Matamazom matamazom, FILE *output){
     if(!matamazom || !output){
@@ -621,21 +675,6 @@ MatamazomResult mtmPrintOrder(Matamazom matamazom, const unsigned int orderId, F
 
 
 
-static Order getOrderFromId(Set set, unsigned int orderId){
-    assert(set);
-    Order wanted_order = NULL;
-
-    SET_FOREACH(Order,currentOrder,set){
-        if(currentOrder->id_of_order == orderId){
-            wanted_order = currentOrder;
-            return wanted_order;
-        }
-    }
-    if(wanted_order == NULL){
-        return NULL;
-    }
-    return wanted_order;
-}
 
 
 unsigned int mtmCreateNewOrder(Matamazom matamazom){
@@ -720,31 +759,6 @@ MatamazomResult mtmChangeProductAmountInOrder(Matamazom matamazom, const unsigne
 
 
 
-/**
- * checkIfOrderIsValid: checks if the amount of all the products in the order are valid
- * @return:
- * false-  if the amount of one product in the order is bigger than the amount in matamazom
- * true -if the amount of all the products is valid
- */
-
-
-static bool checkIfOrderIsValid(Matamazom matamazom, Order order) {
-    assert(matamazom && order);
-    double amount_in_matamazom;
-    double amount_in_order;
-    //AmountSetResult get_amount;
-    AS_FOREACH(Product, orderProduct, order->products_of_order) {
-        /*get_amount=*/asGetAmount(matamazom->list_of_products,orderProduct,&amount_in_matamazom);
-
-        //assert(get_amount==AS_SUCCESS);
-        /*get_amount=*/asGetAmount(order->products_of_order,orderProduct,&amount_in_order);
-        //assert(get_amount==AS_SUCCESS);
-        if(amount_in_order>amount_in_matamazom){
-            return false;
-        }
-    }
-    return true;
-}
 
 MatamazomResult mtmShipOrder(Matamazom matamazom, const unsigned int orderId){
     if(!matamazom){
